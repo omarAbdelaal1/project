@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Curinai - Digital Health System</title>
+    <style>
+      :root {
+        --main-color: #2563eb;
+        --second-color: #1d4ed8;
+        --third-color: #1e40af;
+        --transition-time: 0.4s;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background-color: #f5f5f5;
+        overflow-x: hidden;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      /* Animation Keyframes */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(50px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+
+        50% {
+          transform: scale(1.05);
+        }
+
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+
+        50% {
+          transform: translateY(-10px);
+        }
+
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .active {
+        border-bottom: 3px solid var(--main-color);
+        color: var(--main-color) !important;
+      }
+
+      /* Navigation */
+      nav {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 1rem 5%;
+        position: relative;
+        width: 100%;
+        top: 0;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        transition: all var(--transition-time) ease;
+      }
+
+      nav:hover {
+        background: rgba(255, 255, 255, 1);
+      }
+
+      .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .logo {
+        color: var(--main-color);
+        font-size: 1.7rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        text-decoration: none;
+        position: relative;
+      }
+
+      .logo::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 3px;
+        background-color: var(--main-color);
+        transition: width 0.4s ease;
+      }
+
+      .logo:hover {
+        transform: scale(1.05);
+      }
+
+      .logo:hover::after {
+        width: 100%;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #4b5563;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 5px 0;
+      }
+
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--main-color);
+        transition: width 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        color: var(--main-color);
+      }
+
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      .login-btn {
+        background: var(--main-color);
+        color: white;
+        padding: 0.6rem 1.8rem;
+        border-radius: 25px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .login-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: all 0.5s ease;
+      }
+
+      .login-btn:hover {
+        background: var(--second-color);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(29, 78, 216, 0.4);
+      }
+
+      .login-btn:hover::before {
+        left: 100%;
+      }
+
+      .login-btn:active {
+        transform: translateY(0);
+      }
+
+      /* Hero Section */
+      .hero {
+        background: linear-gradient(
+          135deg,
+          var(--main-color),
+          var(--second-color)
+        );
+        color: white;
+        padding: 10rem 5% 6rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 10%,
+          transparent 10.5%
+        );
+        background-size: 20px 20px;
+        animation: float 15s linear infinite;
+        opacity: 0.5;
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1.5rem;
+        opacity: 0;
+        animation: fadeIn 1s ease forwards;
+        position: relative;
+      }
+
+      .hero p {
+        font-size: 1.3rem;
+        margin-bottom: 2.5rem;
+        opacity: 0;
+        animation: fadeIn 1s ease 0.3s forwards;
+      }
+
+      .cta-btn {
+        background: white;
+        color: var(--main-color);
+        padding: 1.2rem 2.5rem;
+        border-radius: 50px;
+        border: none;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        opacity: 0;
+        animation: fadeIn 1s ease 0.6s forwards;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .cta-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(37, 99, 235, 0.2),
+          transparent
+        );
+        transition: all 0.5s ease;
+      }
+
+      .cta-btn:hover {
+        background: #f8f9fa;
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .cta-btn:hover::before {
+        left: 100%;
+      }
+
+      .cta-btn:active {
+        transform: translateY(0);
+      }
+
+      .banner {
+        background: linear-gradient(135deg, var(--second-color), #505050);
+        color: white;
+        padding: 6rem 5% 4rem;
+        text-align: center;
+        width: 90%;
+        margin: 30px auto;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.5s ease;
+        position: relative;
+        overflow: hidden;
+        animation: fadeIn 1s ease;
+      }
+
+      .banner::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.1) 0%,
+          transparent 100%
+        );
+      }
+
+      .banner:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      }
+
+      .banner h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .banner p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+      }
+
+      /* Features Grid */
+      .features {
+        padding: 6rem 5%;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .features,
+      .top-doctors {
+        display: block;
+        opacity: 1;
+        visibility: visible;
+      }
+      .features h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        position: relative;
+        display: inline-block;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .features h2::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70px;
+        height: 4px;
+        background-color: var(--main-color);
+        border-radius: 2px;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2.5rem;
+        margin-top: 4rem;
+      }
+
+      .feature-card {
+        background: white;
+        padding: 2.5rem 2rem;
+        border-radius: 15px;
+        transition: all 0.5s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        transform: translateY(30px);
+      }
+
+      .feature-card.animated {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .feature-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(37, 99, 235, 0.1),
+          rgba(29, 78, 216, 0.05)
+        );
+        transition: height 0.4s ease;
+        z-index: -1;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-15px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .feature-card:hover::before {
+        height: 100%;
+      }
+
+      .feature-icon {
+        color: var(--main-color);
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+        transition: all 0.4s ease;
+        display: inline-block;
+      }
+
+      .feature-card:hover .feature-icon {
+        transform: scale(1.2) rotate(10deg);
+      }
+
+      .feature-card h3 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: #333;
+        transition: all 0.3s ease;
+      }
+
+      .feature-card:hover h3 {
+        color: var(--main-color);
+      }
+
+      .feature-card p {
+        color: #666;
+        line-height: 1.6;
+      }
+
+      /* Top 3 Doctors Section */
+      .top-doctors {
+        text-align: center;
+        padding: 6rem 5%;
+        background: #f9fafb;
+        position: relative;
+      }
+
+      .top-doctors::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(
+          rgba(37, 99, 235, 0.05) 2px,
+          transparent 2px
+        );
+        background-size: 30px 30px;
+        opacity: 0.5;
+      }
+
+      .top-doctors h2 {
+        font-size: 2.5rem;
+        margin-bottom: 3rem;
+        color: var(--main-color);
+        position: relative;
+        display: inline-block;
+      }
+
+      .top-doctors h2::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70px;
+        height: 4px;
+        background-color: var(--main-color);
+        border-radius: 2px;
+      }
+
+      .doctors-grid {
+        display: flex;
+        justify-content: center;
+        gap: 2.5rem;
+        flex-wrap: wrap;
+      }
+
+      .doctor-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        text-align: center;
+        width: 260px;
+        transition: all 0.5s ease;
+        position: relative;
+        overflow: hidden;
+        transform: translateY(30px);
+      }
+
+      .doctor-card.animated {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .doctor-card::before {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--main-color);
+        opacity: 0.1;
+        transition: all 0.5s ease;
+      }
+
+      .doctor-card:hover {
+        transform: translateY(-15px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      .doctor-card:hover::before {
+        transform: scale(12);
+        opacity: 0.05;
+      }
+
+      .doctor-card img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 1.5rem;
+        border: 5px solid rgba(37, 99, 235, 0.1);
+        transition: all 0.4s ease;
+        animation: float 5s ease-in-out infinite;
+      }
+
+      .doctor-card:hover img {
+        border-color: rgba(37, 99, 235, 0.3);
+        transform: scale(1.05);
+      }
+
+      .doctor-card h3 {
+        color: var(--third-color);
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .doctor-card p {
+        color: #4b5563;
+        margin: 0.5rem 0;
+      }
+
+      .doctor-card p:last-of-type {
+        font-size: 1.2rem;
+        color: #f59e0b;
+      }
+
+      /* Auth Pages Styles */
+      .auth-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(
+          135deg,
+          var(--main-color),
+          var(--third-color)
+        );
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .auth-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></svg>');
+        background-size: 100px 100px;
+        opacity: 0.5;
+      }
+
+      .auth-box {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 450px;
+        animation: fadeIn 0.8s ease;
+        position: relative;
+      }
+
+      .auth-box::before {
+        content: "";
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        right: -5px;
+        bottom: -5px;
+        background: linear-gradient(
+          135deg,
+          var(--main-color),
+          var(--second-color),
+          var(--third-color)
+        );
+        z-index: -1;
+        border-radius: 25px;
+        opacity: 0.5;
+        transition: all 0.5s ease;
+      }
+
+      .auth-box:hover::before {
+        opacity: 0.7;
+        top: -8px;
+        left: -8px;
+        right: -8px;
+        bottom: -8px;
+      }
+
+      .auth-box h2 {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        color: var(--main-color);
+        font-size: 2rem;
+        position: relative;
+      }
+
+      .auth-box h2::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background-color: var(--main-color);
+        border-radius: 2px;
+      }
+
+      .form-group {
+        margin-bottom: 1rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.8rem;
+        color: #4b5563;
+        font-weight: bold;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .form-group input:focus {
+        border-color: var(--main-color);
+        box-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
+        outline: none;
+      }
+
+      .auth-btn {
+        width: 100%;
+        background: var(--main-color);
+        color: white;
+        padding: 1rem;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 1.5rem;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .auth-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: all 0.5s ease;
+      }
+
+      .auth-btn:hover {
+        background: var(--second-color);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(29, 78, 216, 0.3);
+      }
+
+      .auth-btn:hover::before {
+        left: 100%;
+      }
+
+      .auth-btn:active {
+        transform: translateY(0);
+      }
+
+      .auth-link {
+        text-align: center;
+        margin-top: 2rem;
+      }
+
+      .auth-link a {
+        color: var(--main-color);
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .auth-link a::after {
+        content: "";
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--main-color);
+        transition: width 0.3s ease;
+      }
+
+      .auth-link a:hover {
+        color: var(--third-color);
+      }
+
+      .auth-link a:hover::after {
+        width: 100%;
+      }
+
+      /* Footer Styles */
+      .footer {
+        background: var(--third-color);
+        color: white;
+        padding: 4rem 5% 2rem;
+        font-size: 1rem;
+        margin-top: 4rem;
+        position: relative;
+      }
+
+      .footer::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 10px;
+        background: linear-gradient(
+          90deg,
+          var(--main-color),
+          var(--second-color),
+          var(--third-color)
+        );
+      }
+
+      .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 3rem;
+      }
+
+      .footer-section h3 {
+        margin-bottom: 1.5rem;
+        font-size: 1.3rem;
+        position: relative;
+        display: inline-block;
+      }
+
+      .footer-section h3::after {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 40px;
+        height: 3px;
+        background-color: white;
+        border-radius: 2px;
+      }
+
+      .footer-section p {
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+      }
+
+      .footer-section ul {
+        list-style: none;
+      }
+
+      .footer-section ul li {
+        margin-bottom: 0.8rem;
+        transition: all 0.3s ease;
+      }
+
+      .footer-section ul li:hover {
+        transform: translateX(5px);
+      }
+
+      .footer-section ul li a {
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+        padding-left: 15px;
+      }
+
+      .footer-section ul li a::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        opacity: 0;
+        transition: all 0.3s ease;
+      }
+
+      .footer-section ul li a:hover {
+        color: #bfdbfe;
+        padding-left: 20px;
+      }
+
+      .footer-section ul li a:hover::before {
+        opacity: 1;
+      }
+
+      .footer-bottom {
+        text-align: center;
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      /* AI Button Style */
+      .ai-button {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 65px;
+        height: 65px;
+        background-color: var(--main-color);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+        transition: all 0.4s ease;
+        animation: pulse 2s infinite;
+      }
+
+      .ai-button::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background-color: var(--main-color);
+        opacity: 0.6;
+        animation: pulse 2s infinite;
+        z-index: -1;
+      }
+
+      .ai-button:hover {
+        background-color: var(--second-color);
+        transform: scale(1.1);
+        animation: none;
+      }
+
+      .ai-button:hover::before {
+        animation: none;
+      }
+
+      /* Chat Container Style */
+      .chat-container {
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        width: 380px;
+        height: 500px;
+        background-color: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 998;
+        border: 1px solid #e0e0e0;
+        transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      }
+
+      .chat-container span {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .chat-container span:hover {
+        transform: scale(1.1);
+      }
+
+      .chat-header {
+        background: linear-gradient(
+          135deg,
+          var(--main-color),
+          var(--second-color)
+        );
+        color: white;
+        padding: 18px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+      }
+
+      .chat-header h3 {
+        margin: 0;
+        font-size: 18px;
+      }
+
+      .close-chat {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 22px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+      }
+
+      .close-chat:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: rotate(90deg);
+      }
+
+      .chat-messages {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        background-color: #f8faff;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .message {
+        margin-bottom: 15px;
+        max-width: 80%;
+        padding: 12px 18px;
+        border-radius: 18px;
+        line-height: 1.5;
+        font-size: 15px;
+        animation: fadeIn 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .bot-message {
+        background-color: #e3f2fd;
+        color: #333;
+        border-top-left-radius: 5px;
+        align-self: flex-start;
+        position: relative;
+      }
+
+      .bot-message::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: -10px;
+        width: 20px;
+        height: 20px;
+        background-color: #e3f2fd;
+        clip-path: polygon(100% 0, 0 100%, 100% 100%);
+      }
+
+      .user-message {
+        background-color: var(--main-color);
+        color: white;
+        margin-left: auto;
+        border-top-right-radius: 5px;
+        position: relative;
+      }
+
+      .user-message::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: -10px;
+        width: 20px;
+        height: 20px;
+        background-color: var(--main-color);
+        clip-path: polygon(0 0, 0 100%, 100% 100%);
+      }
+
+      .chat-input-container {
+        display: flex;
+        padding: 15px;
+        border-top: 1px solid #e0e0e0;
+        background-color: white;
+      }
+
+      .chat-input {
+        flex: 1;
+        padding: 14px 18px;
+        border: 1px solid #ddd;
+        border-radius: 30px;
+        outline: none;
+        font-size: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+      }
+
+      .chat-input:focus {
+        border-color: var(--main-color);
+        box-shadow: 0 0 10px rgba(37, 99, 235, 0.15);
+      }
+
+      .send-button {
+        background-color: var(--main-color);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+        margin-left: 10px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+        transition: all 0.3s ease;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .send-button:hover {
+        background-color: var(--second-color);
+        transform: translateY(-3px) rotate(45deg);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Show animation */
+      .chat-container.active {
+        display: flex;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Typing indicator */
+      .typing-indicator {
+        display: flex;
+        padding: 10px 15px;
+
+        background-color: #e3f2fd;
+        border-radius: 15px;
+        margin-bottom: 15px;
+        max-width: 80%;
+        border-top-left-radius: 5px;
+        align-self: flex-start;
+        display: none;
+      }
+
+      .typing-indicator span {
+        height: 8px;
+        width: 8px;
+        background-color: #1a73e8;
+        border-radius: 50%;
+        display: inline-block;
+        margin: 0 2px;
+        opacity: 0.7;
+      }
+
+      .typing-indicator span:nth-child(1) {
+        animation: blink 1s infinite 0.2s;
+      }
+
+      .typing-indicator span:nth-child(2) {
+        animation: blink 1s infinite 0.4s;
+      }
+
+      .typing-indicator span:nth-child(3) {
+        animation: blink 1s infinite 0.6s;
+      }
+
+      @keyframes blink {
+        0% {
+          opacity: 0.4;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0.4;
+        }
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+
+        .hero h1 {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav>
+      <div class="nav-container">
+        <div onclick="showHome()">
+          <a href="home.html" class="logo">Curinai</a>
+        </div>
+        <div class="nav-links">
+          <a href="home.html" onclick="showHome()" class="active">Home</a>
+          <a href="doctors.html">Doctors</a>
+          <a href="medical.html">Medical Records</a>
+          <a href="shop.html">Medical Shop</a>
+          <a href="contact.html">Contact</a>
+          <button class="login-btn" onclick="showSignIn()">Login</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home-page">
+      <!-- Hero Section -->
+      <section class="hero" id="home">
+        <h1>Your Health, Digitally Connected</h1>
+        <p>
+          Experience healthcare reimagined with our integrated digital health
+          platform
+        </p>
+        <button class="cta-btn" onclick="showSignUp()">Get Started</button>
+      </section>
+
+      <!-- Banner Section -->
+      <section class="banner">
+        <h1>Ads Banner</h1>
+        <p>Your banner is here</p>
+      </section>
+
+      <!-- Features Section -->
+      <section class="features" id="features">
+        <h2>Our Services</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <h3>Health Records</h3>
+            <p>
+              Securely store and access your medical history, test results, and
+              prescriptions
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📅</div>
+            <h3>Book Appointments</h3>
+            <p>
+              Schedule appointments with healthcare providers quickly and easily
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🤖</div>
+            <h3>AI Health Assistant</h3>
+            <p>Get instant health insights and recommendations powered by AI</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Top Doctors Section -->
+      <section class="top-doctors" id="top-doctors">
+        <h2>Top 3 Doctors</h2>
+        <div class="doctors-grid">
+          <div class="doctor-card">
+            <img src="m.jpg" alt="Dr. Sarah Johnson" />
+            <h3>Dr. Sarah Johnson</h3>
+            <p>Cardiologist</p>
+            <p>⭐ 4.9</p>
+          </div>
+          <div class="doctor-card">
+            <img src="m.jpg" alt="Dr. Michael Chen" />
+            <h3>Dr. Michael Chen</h3>
+            <p>Pediatrician</p>
+            <p>⭐ 4.8</p>
+          </div>
+          <div class="doctor-card">
+            <img src="m.jpg" alt="Dr. Emily Brown" />
+            <h3>Dr. Emily Brown</h3>
+            <p>Dermatologist</p>
+            <p>⭐ 4.7</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>About Curinai</h3>
+            <p>
+              Your trusted digital healthcare platform connecting patients with
+              healthcare providers worldwide.
+            </p>
+          </div>
+          <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="home.html">Home</a></li>
+              <li><a href="#features">Features</a></li>
+              <li><a href="doctors.html">Find Doctors</a></li>
+              <li><a href="#contact.html">Contact Us</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h3>Contact Info</h3>
+            <ul>
+              <li>Email: info@Curinai.com</li>
+              <li>Phone: +1 (234) 567-8912</li>
+              <li>Address: 123 Health Street, Medical City</li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h3>Follow Us</h3>
+            <ul>
+              <li><a href="#">Facebook</a></li>
+              <li><a href="#">Twitter</a></li>
+              <li><a href="#">LinkedIn</a></li>
+              <li><a href="#">Instagram</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 Curinai. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Sign In Page -->
+    <div id="signin-page" class="auth-container" style="display: none">
+      <div class="auth-box">
+        <h2>Sign In</h2>
+        <form onsubmit="handleSignIn(event)">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" required />
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" required />
+          </div>
+          <button type="submit" class="auth-btn">Sign In</button>
+          <div class="auth-link">
+            <a href="#" onclick="showSignUp()"
+              >Don't have an account? Sign Up</a
+            >
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Sign Up Page -->
+    <div id="signup-page" class="auth-container" style="display: none">
+      <div class="auth-box">
+        <h2>Create Account</h2>
+        <form onsubmit="handleSignUp(event)">
+          <div class="form-group">
+            <label for="fullname">Full Name</label>
+            <input type="text" id="fullname" required />
+          </div>
+          <div class="form-group">
+            <label for="date-of-birth">Date of Birth</label>
+            <input type="date" id="date-of-birth" required />
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <input type="text" id="gender" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="number" id="phone" required />
+          </div>
+          <div class="form-group">
+            <label for="address">Address</label>
+            <input type="text" id="address" required />
+          </div>
+          <div class="form-group">
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" required />
+          </div>
+          <div class="form-group">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" required />
+          </div>
+          <div class="form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" id="confirm-password" required />
+          </div>
+          <button type="submit" class="auth-btn">Sign Up</button>
+          <div class="auth-link">
+            <a href="#" onclick="showSignIn()"
+              >Already have an account? Sign In</a
+            >
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- AI Chat Button -->
+    <div class="ai-button" id="aiButton">AI</div>
+
+    <!-- Chat Container -->
+    <div class="chat-container" id="chatContainer">
+      <div class="chat-header">
+        <h3>Curinai Health Assistant</h3>
+        <button class="close-chat" id="closeChat">×</button>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot-message">
+          Hello! I'm your Curinai Health Assistant. How can I help you today?
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="chat-input-container">
+        <input
+          type="text"
+          class="chat-input"
+          id="chatInput"
+          placeholder="Type your message here..."
+        />
+        <span>🎙️</span>
+        <button class="send-button" id="sendButton">→</button>
+      </div>
+    </div>
+    >
+
+    <script>
+      // Page Navigation Functions
+      function showHome() {
+        document.getElementById("home-page").style.display = "block";
+        document.getElementById("signin-page").style.display = "none";
+        document.getElementById("signup-page").style.display = "none";
+        document.getElementById("doctors-page").style.display = "none";
+
+        // Ensure features and doctors sections are visible
+        document
+          .querySelectorAll(".features, .top-doctors")
+          .forEach((section) => {
+            section.style.display = "block";
+          });
+
+        // Initialize animations for feature cards and doctor cards
+        document
+          .querySelectorAll(".feature-card, .doctor-card")
+          .forEach((card, index) => {
+            setTimeout(() => {
+              card.classList.add("animated");
+            }, index * 200);
+          });
+      }
+
+      function showSignIn() {
+        document.getElementById("home-page").style.display = "none";
+        document.getElementById("signin-page").style.display = "flex";
+        document.getElementById("signup-page").style.display = "none";
+        document.getElementById("doctors-page").style.display = "none";
+      }
+
+      function showSignUp() {
+        document.getElementById("home-page").style.display = "none";
+        document.getElementById("signin-page").style.display = "none";
+        document.getElementById("signup-page").style.display = "flex";
+        document.getElementById("doctors-page").style.display = "none";
+      }
+
+      function showDoctors() {
+        document.getElementById("home-page").style.display = "none";
+        document.getElementById("signin-page").style.display = "none";
+        document.getElementById("signup-page").style.display = "none";
+        document.getElementById("doctors-page").style.display = "block";
+      }
+
+      // Authentication Functions
+      function handleSignIn(event) {
+        event.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        // Add your authentication logic here
+        console.log("Sign in attempt:", { email, password });
+        alert("Sign in successful!");
+        showHome();
+      }
+
+      function handleSignUp(event) {
+        event.preventDefault();
+        const fullname = document.getElementById("fullname").value;
+        const email = document.getElementById("signup-email").value;
+        const password = document.getElementById("signup-password").value;
+        const confirmPassword =
+          document.getElementById("confirm-password").value;
+
+        if (password !== confirmPassword) {
+          alert("Passwords do not match!");
+          return;
+        }
+
+        // Add your registration logic here
+        console.log("Sign up attempt:", { fullname, email, password });
+        alert("Registration successful!");
+        showSignIn();
+      }
+
+      // Initialize the page
+      showHome();
+    </script>
+    <script>
+      // JavaScript for chat functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        const aiButton = document.getElementById("aiButton");
+        const chatContainer = document.getElementById("chatContainer");
+        const closeChat = document.getElementById("closeChat");
+        const chatInput = document.getElementById("chatInput");
+        const sendButton = document.getElementById("sendButton");
+        const chatMessages = document.getElementById("chatMessages");
+        const typingIndicator = document.getElementById("typingIndicator");
+
+        // Toggle chat window
+        aiButton.addEventListener("click", function () {
+          chatContainer.classList.toggle("active");
+        });
+
+        // Close chat window
+        closeChat.addEventListener("click", function () {
+          chatContainer.classList.remove("active");
+        });
+
+        // Send message function
+        function sendMessage() {
+          const message = chatInput.value.trim();
+
+          if (message !== "") {
+            // Add user message
+            const userMessageDiv = document.createElement("div");
+            userMessageDiv.classList.add("message", "user-message");
+            userMessageDiv.textContent = message;
+            chatMessages.appendChild(userMessageDiv);
+
+            // Clear input
+            chatInput.value = "";
+
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Show typing indicator
+            typingIndicator.style.display = "flex";
+
+            // Simulate AI response after delay
+            setTimeout(function () {
+              // Hide typing indicator
+
+              typingIndicator.style.display = "none";
+
+              // Add bot response (here you would integrate with your actual AI)
+              const botResponse = getBotResponse(message);
+              const botMessageDiv = document.createElement("div");
+              botMessageDiv.classList.add("message", "bot-message");
+              botMessageDiv.textContent = botResponse;
+              chatMessages.appendChild(botMessageDiv);
+
+              // Scroll to bottom again
+              chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1500);
+          }
+        }
+
+        // Handle send button click
+        sendButton.addEventListener("click", sendMessage);
+
+        // Handle enter key
+        chatInput.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            sendMessage();
+          }
+        });
+
+        // Simple responses - in a real app, you would connect to an AI API
+        function getBotResponse(message) {
+          message = message.toLowerCase();
+
+          if (message.includes("hello") || message.includes("hi")) {
+            return "Hello! How can I assist you with your healthcare needs today?";
+          } else if (
+            message.includes("appointment") ||
+            message.includes("book")
+          ) {
+            return "You can schedule an appointment through our portal. Would you like me to help you with that?";
+          } else if (
+            message.includes("doctor") ||
+            message.includes("specialist")
+          ) {
+            return "We have many specialists available. What type of doctor are you looking for?";
+          } else if (
+            message.includes("medical record") ||
+            message.includes("history")
+          ) {
+            return "Your medical records are available in the Medical Records section. You need to be logged in to access them.";
+          } else if (
+            message.includes("prescription") ||
+            message.includes("medicine")
+          ) {
+            return "You can view and request prescription refills from your patient dashboard after logging in.";
+          } else if (message.includes("thank")) {
+            return "You're welcome! Is there anything else I can help you with?";
+          } else {
+            return "Thank you for your question. How else can I assist you with our healthcare services?";
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

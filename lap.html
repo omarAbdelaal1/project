@@ -1,0 +1,3308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Laboratory Dashboard - Digital Health System</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      :root {
+        --primary: #2c3e50;
+        --secondary: #3498db;
+        --light: #ecf0f1;
+        --accent: #1abc9c;
+        --danger: #e74c3c;
+        --success: #2ecc71;
+        --warning: #f39c12;
+        --text-dark: #2c3e50;
+        --text-light: #ecf0f1;
+      }
+
+      body {
+        background-color: #f5f7fa;
+      }
+
+      .container {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* Sidebar Styles */
+      .sidebar {
+        width: 250px;
+        background-color: var(--primary);
+        color: var(--text-light);
+        padding: 20px 0;
+        transition: all 0.3s;
+      }
+
+      .sidebar-header {
+        padding: 0 20px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: center;
+      }
+
+      .sidebar-header h2 {
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+      }
+
+      .sidebar-header p {
+        font-size: 0.8rem;
+        opacity: 0.8;
+      }
+
+      .profile-info {
+        padding: 20px;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .profile-pic {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: var(--accent);
+        margin: 0 auto 10px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+      }
+
+      .nav-links {
+        list-style: none;
+        padding: 20px 0;
+      }
+
+      .nav-item {
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .nav-item:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .nav-item.active {
+        background-color: var(--secondary);
+      }
+
+      .nav-item i {
+        margin-right: 10px;
+        width: 20px;
+        text-align: center;
+      }
+
+      /* Main Content Area */
+      .main-content {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .header h1 {
+        color: var(--primary);
+      }
+
+      .search-bar {
+        display: flex;
+        align-items: center;
+        background-color: white;
+        border-radius: 30px;
+        padding: 8px 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .search-bar input {
+        border: none;
+        outline: none;
+        padding: 5px 10px;
+        width: 250px;
+      }
+
+      .user-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .btn {
+        padding: 8px 15px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-primary {
+        background-color: var(--secondary);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background-color: #2980b9;
+      }
+
+      .btn-danger {
+        background-color: var(--danger);
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background-color: #c0392b;
+      }
+
+      .btn-success {
+        background-color: var(--success);
+        color: white;
+      }
+
+      .btn-success:hover {
+        background-color: #27ae60;
+      }
+
+      .btn-warning {
+        background-color: var(--warning);
+        color: white;
+      }
+
+      .btn-warning:hover {
+        background-color: #e67e22;
+      }
+
+      /* Cards and Widgets */
+      .card-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        flex: 1;
+        min-width: 250px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-header {
+        padding: 15px 20px;
+        background-color: var(--primary);
+        color: white;
+      }
+
+      .card-body {
+        padding: 20px;
+      }
+
+      .card-footer {
+        padding: 15px 20px;
+        background-color: #f9f9f9;
+        border-top: 1px solid #eee;
+        text-align: center;
+      }
+
+      .stat-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 200px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-icon {
+        width: 50px;
+        height: 50px;
+        background-color: rgba(52, 152, 219, 0.2);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+        font-size: 1.5rem;
+        color: var(--secondary);
+      }
+
+      .stat-info h3 {
+        font-size: 1.8rem;
+        margin-bottom: 5px;
+        color: var(--text-dark);
+      }
+
+      .stat-info p {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+      }
+
+      /* Table styles */
+      .table-container {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
+
+      thead {
+        background-color: #f1f1f1;
+      }
+
+      th,
+      td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      tbody tr {
+        transition: background-color 0.3s ease;
+      }
+
+      tbody tr:hover {
+        background-color: #f9f9f9;
+      }
+
+      .action-btns {
+        display: flex;
+        gap: 5px;
+      }
+
+      .btn-sm {
+        padding: 5px 10px;
+        font-size: 0.8rem;
+      }
+
+      /* Forms */
+      .form-container {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 30px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--text-dark);
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+      }
+
+      .form-row {
+        display: flex;
+        gap: 20px;
+      }
+
+      .form-row .form-group {
+        flex: 1;
+      }
+
+      textarea.form-control {
+        min-height: 100px;
+        resize: vertical;
+      }
+
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 30px;
+      }
+
+      .upload-container {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .upload-container h2 {
+        margin-bottom: 15px;
+        color: var(--secondary);
+      }
+
+      .file-upload-area {
+        border: 2px dashed #ddd;
+        padding: 30px;
+        text-align: center;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: border-color 0.3s ease;
+        margin-bottom: 15px;
+      }
+
+      .file-upload-area:hover {
+        border-color: var(--secondary);
+      }
+
+      .file-upload-icon {
+        font-size: 2.5rem;
+        color: var(--secondary);
+        margin-bottom: 10px;
+      }
+
+      input[type="file"] {
+        margin: 10px 0;
+      }
+
+      .upload-btn:hover {
+        background-color: #0056b3;
+      }
+
+      #filePreview {
+        margin-top: 15px;
+        display: none;
+      }
+
+      #filePreview img {
+        max-width: 100%;
+        max-height: 200px;
+        border-radius: 5px;
+      }
+
+      /* Hide all sections by default */
+      .section {
+        display: none;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Show active section */
+      .section.active {
+        display: block;
+      }
+
+      /* Lab Results Section */
+      .test-result {
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .test-result:last-child {
+        border-bottom: none;
+      }
+
+      .test-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+
+      .test-name {
+        font-weight: 600;
+      }
+
+      .test-value {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+      }
+
+      .test-value span {
+        color: #7f8c8d;
+      }
+
+      .normal-range {
+        font-size: 0.8rem;
+        color: #95a5a6;
+      }
+
+      .abnormal {
+        color: var(--danger);
+      }
+
+      /* Patient Profile */
+      .patient-details {
+        display: flex;
+        margin-bottom: 30px;
+      }
+
+      .patient-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: #ddd;
+        margin-right: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        color: #95a5a6;
+      }
+
+      .patient-info h2 {
+        margin-bottom: 10px;
+      }
+
+      .patient-info p {
+        margin-bottom: 5px;
+        color: #7f8c8d;
+      }
+
+      .patient-tabs {
+        display: flex;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 20px;
+      }
+
+      .patient-tab {
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .patient-tab:hover {
+        background-color: #f1f1f1;
+      }
+
+      .patient-tab.active {
+        border-bottom: 3px solid var(--secondary);
+        color: var(--secondary);
+        font-weight: 600;
+      }
+
+      .patient-tab-content {
+        display: none;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .patient-tab-content.active {
+        display: block;
+      }
+
+      /* Modal */
+      .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
+      .modal-backdrop.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+        transform: scale(0.9);
+        opacity: 0;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+      }
+
+      .modal-backdrop.active .modal {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      .modal-header {
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .modal-body {
+        padding: 20px;
+      }
+
+      .modal-footer {
+        padding: 15px 20px;
+        border-top: 1px solid #eee;
+        text-align: right;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #7f8c8d;
+        transition: color 0.3s ease;
+      }
+
+      .close-btn:hover {
+        color: var(--danger);
+      }
+
+      /* Badge styles */
+      .badge {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .badge-completed {
+        background-color: rgba(46, 204, 113, 0.2);
+        color: #27ae60;
+      }
+
+      .badge-pending {
+        background-color: rgba(241, 196, 15, 0.2);
+        color: #f39c12;
+      }
+
+      .badge-critical {
+        background-color: rgba(231, 76, 60, 0.2);
+        color: #e74c3c;
+      }
+
+      /* Notifications */
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 4px;
+        color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .notification.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .notification.success {
+        background-color: #2ecc71;
+      }
+
+      .notification.error {
+        background-color: #e74c3c;
+      }
+
+      .notification.info {
+        background-color: #3498db;
+      }
+
+      /* AI Assistant */
+      .ai-assistant {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: #2563eb;
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        transition: transform 0.3s;
+        z-index: 1000;
+      }
+
+      .ai-assistant:hover {
+        transform: scale(1.1);
+      }
+
+      /* Confirm dialog */
+      .confirm-dialog {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
+      .confirm-dialog.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .confirm-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        transform: scale(0.9);
+        opacity: 0;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+      }
+
+      .confirm-dialog.active .confirm-content {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      .confirm-message {
+        margin-bottom: 20px;
+        color: var(--text-dark);
+      }
+
+      .confirm-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+        }
+
+        .sidebar {
+          width: 100%;
+          margin-bottom: 20px;
+        }
+
+        .form-row {
+          flex-direction: column;
+          gap: 0;
+        }
+
+        .card-row {
+          flex-direction: column;
+        }
+
+        .patient-details {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+
+        .patient-image {
+          margin-right: 0;
+          margin-bottom: 15px;
+        }
+
+        .patient-tabs {
+          flex-wrap: wrap;
+        }
+
+        .patient-tab {
+          flex: 1;
+          text-align: center;
+          min-width: 120px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h2>Curinai</h2>
+          <p>Digital Health System</p>
+        </div>
+
+        <div class="profile-info">
+          <div class="profile-pic">🧪</div>
+          <h3 id="lab-name">Central Laboratory</h3>
+          <p id="lab-id">ID: LAB-12345</p>
+        </div>
+
+        <ul class="nav-links">
+          <li class="nav-item active" data-section="dashboard">
+            <i>🏠</i> Dashboard
+          </li>
+          <li class="nav-item" data-section="patients">
+            <i>👥</i> Patient Records
+          </li>
+          <li class="nav-item" data-section="add-record">
+            <i>📝</i> Add Record
+          </li>
+          <li class="nav-item" data-section="lab-profile">
+            <i>🧪</i> Laboratory Profile
+          </li>
+          <li class="nav-item" id="logout-btn"><i>🚪</i> Logout</li>
+        </ul>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="main-content">
+        <!-- Header -->
+        <div class="header">
+          <h1 id="page-title">Laboratory Dashboard</h1>
+
+          <div class="user-actions">
+            <div class="search-bar">
+              <i>🔍</i>
+              <input
+                type="text"
+                id="search-input"
+                placeholder="Search patients..."
+              />
+            </div>
+            <button class="btn btn-primary" id="add-patient-btn">
+              Add Patient
+            </button>
+          </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+          <div class="card-row">
+            <div class="stat-card">
+              <div class="stat-icon">📊</div>
+              <div class="stat-info">
+                <h3 id="tests-today-count">52</h3>
+                <p>Tests Today</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">👥</div>
+              <div class="stat-info">
+                <h3 id="total-patients-count">128</h3>
+                <p>Total Patients</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">⚠️</div>
+              <div class="stat-info">
+                <h3 id="critical-results-count">7</h3>
+                <p>Critical Results</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">✅</div>
+              <div class="stat-info">
+                <h3 id="completion-rate">94%</h3>
+                <p>Completion Rate</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2>Recent Test Results</h2>
+            </div>
+            <div class="card-body">
+              <div class="table-container">
+                <table id="recent-tests-table">
+                  <thead>
+                    <tr>
+                      <th>Patient ID</th>
+                      <th>Patient Name</th>
+                      <th>Test Type</th>
+                      <th>Date</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- This will be populated dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-primary" id="view-all-tests-btn">
+                View All Tests
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Patient Records Section -->
+        <section id="patients" class="section">
+          <div class="card">
+            <div class="card-header">
+              <h2>Patient Records</h2>
+            </div>
+            <div class="card-body">
+              <div
+                class="search-bar"
+                style="
+                  margin-bottom: 20px;
+                  background: none;
+                  box-shadow: none;
+                  padding: 0;
+                "
+              >
+                <input
+                  type="text"
+                  id="patient-search"
+                  placeholder="Search by name, ID, or condition..."
+                  style="width: 100%; border: 1px solid #ddd"
+                />
+              </div>
+              <div class="table-container">
+                <table id="patients-table">
+                  <thead>
+                    <tr>
+                      <th>Patient ID</th>
+                      <th>Name</th>
+                      <th>Age</th>
+                      <th>Gender</th>
+                      <th>Last Test</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- This will be populated dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- AI Assistant Fixed Button -->
+        <div class="ai-assistant" onclick="openAIAssistant()">AI</div>
+
+        <!-- Add Medical Record Section -->
+        <section id="add-record" class="section">
+          <div class="form-container">
+            <h2>Add New Medical Record</h2>
+            <form id="record-form">
+              <div class="form-group">
+                <label for="patient-select">Select Patient</label>
+                <select id="patient-select" class="form-control" required>
+                  <option value="">-- Select Patient --</option>
+                  <!-- This will be populated dynamically -->
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="test-type">Test Type</label>
+                <select id="test-type" class="form-control" required>
+                  <option value="">-- Select Test Type --</option>
+                  <option value="blood">Blood Work Panel</option>
+                  <option value="lipid">Lipid Panel</option>
+                  <option value="liver">Liver Function</option>
+                  <option value="kidney">Kidney Function</option>
+                  <option value="glucose">Glucose Test</option>
+                  <option value="thyroid">Thyroid Panel</option>
+                  <option value="cbc">Complete Blood Count</option>
+                </select>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="collection-date">Collection Date</label>
+                  <input
+                    type="date"
+                    id="collection-date"
+                    class="form-control"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="collection-time">Collection Time</label>
+                  <input
+                    type="time"
+                    id="collection-time"
+                    class="form-control"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div id="blood-panel-fields" style="display: none">
+                <h3>Blood Work Parameters</h3>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="wbc">WBC (10^3/μL)</label>
+                    <input
+                      type="number"
+                      id="wbc"
+                      class="form-control"
+                      step="0.01"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="rbc">RBC (10^6/μL)</label>
+                    <input
+                      type="number"
+                      id="rbc"
+                      class="form-control"
+                      step="0.01"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="hemoglobin">Hemoglobin (g/dL)</label>
+                    <input
+                      type="number"
+                      id="hemoglobin"
+                      class="form-control"
+                      step="0.1"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="hematocrit">Hematocrit (%)</label>
+                    <input
+                      type="number"
+                      id="hematocrit"
+                      class="form-control"
+                      step="0.1"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="platelets">Platelets (10^3/μL)</label>
+                    <input type="number" id="platelets" class="form-control" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="neutrophils">Neutrophils (%)</label>
+                    <input
+                      type="number"
+                      id="neutrophils"
+                      class="form-control"
+                      step="0.1"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div id="lipid-panel-fields" style="display: none">
+                <h3>Lipid Panel Parameters</h3>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="total-cholesterol"
+                      >Total Cholesterol (mg/dL)</label
+                    >
+                    <input
+                      type="number"
+                      id="total-cholesterol"
+                      class="form-control"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="ldl-cholesterol">LDL Cholesterol (mg/dL)</label>
+                    <input
+                      type="number"
+                      id="ldl-cholesterol"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="hdl-cholesterol">HDL Cholesterol (mg/dL)</label>
+                    <input
+                      type="number"
+                      id="hdl-cholesterol"
+                      class="form-control"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="triglycerides">Triglycerides (mg/dL)</label>
+                    <input
+                      type="number"
+                      id="triglycerides"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div id="liver-panel-fields" style="display: none">
+                <h3>Liver Function Parameters</h3>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="alt">ALT (U/L)</label>
+                    <input type="number" id="alt" class="form-control" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="ast">AST (U/L)</label>
+                    <input type="number" id="ast" class="form-control" />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="alp">ALP (U/L)</label>
+                    <input type="number" id="alp" class="form-control" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="bilirubin">Total Bilirubin (mg/dL)</label>
+                    <input
+                      type="number"
+                      id="bilirubin"
+                      class="form-control"
+                      step="0.01"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div id="kidney-panel-fields" style="display: none">
+                <h3>Kidney Function Parameters</h3>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="creatinine">Creatinine (mg/dL)</label>
+                    <input
+                      type="number"
+                      id="creatinine"
+                      class="form-control"
+                      step="0.01"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="urea">Blood Urea Nitrogen (mg/dL)</label>
+                    <input type="number" id="urea" class="form-control" />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="egfr">eGFR (mL/min/1.73m²)</label>
+                    <input type="number" id="egfr" class="form-control" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="uric-acid">Uric Acid (mg/dL)</label>
+                    <input
+                      type="number"
+                      id="uric-acid"
+                      class="form-control"
+                      step="0.1"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div id="glucose-panel-fields" style="display: none">
+                <h3>Glucose Test Parameters</h3>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="fasting-glucose">Fasting Glucose (mg/dL)</label>
+                    <input
+                      type="number"
+                      id="fasting-glucose"
+                      class="form-control"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="hba1c">HbA1c (%)</label>
+                    <input
+                      type="number"
+                      id="hba1c"
+                      class="form-control"
+                      step="0.1"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div id="thyroid-panel-fields" style="display: none">
+                <h3>Thyroid Panel Parameters</h3>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="tsh">TSH (mIU/L)</label>
+                    <input
+                      type="number"
+                      id="tsh"
+                      class="form-control"
+                      step="0.01"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="t4">T4 (μg/dL)</label>
+                    <input
+                      type="number"
+                      id="t4"
+                      class="form-control"
+                      step="0.1"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="t3">T3 (ng/dL)</label>
+                    <input
+                      type="number"
+                      id="t3"
+                      class="form-control"
+                      step="0.1"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="free-t4">Free T4 (ng/dL)</label>
+                    <input
+                      type="number"
+                      id="free-t4"
+                      class="form-control"
+                      step="0.01"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div id="cbc-panel-fields" style="display: none">
+                <h3>Complete Blood Count Parameters</h3>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="wbc-cbc">WBC (10^3/μL)</label>
+                    <input
+                      type="number"
+                      id="wbc-cbc"
+                      class="form-control"
+                      step="0.01"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="rbc-cbc">RBC (10^6/μL)</label>
+                    <input
+                      type="number"
+                      id="rbc-cbc"
+                      class="form-control"
+                      step="0.01"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="hemoglobin-cbc">Hemoglobin (g/dL)</label>
+                    <input
+                      type="number"
+                      id="hemoglobin-cbc"
+                      class="form-control"
+                      step="0.1"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="hematocrit-cbc">Hematocrit (%)</label>
+                    <input
+                      type="number"
+                      id="hematocrit-cbc"
+                      class="form-control"
+                      step="0.1"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="platelets-cbc">Platelets (10^3/μL)</label>
+                    <input
+                      type="number"
+                      id="platelets-cbc"
+                      class="form-control"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="mcv">MCV (fL)</label>
+                    <input
+                      type="number"
+                      id="mcv"
+                      class="form-control"
+                      step="0.1"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="upload-container">
+                <h3>Upload Test Results Document</h3>
+                <div class="file-upload-area" id="file-upload-area">
+                  <div class="file-upload-icon">📄</div>
+                  <p>Drag and drop your file here, or click to select file</p>
+                </div>
+                <input
+                  type="file"
+                  id="file-input"
+                  accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                  style="display: none"
+                />
+                <div
+                  id="file-name"
+                  style="margin-top: 10px; font-size: 14px; color: #666"
+                ></div>
+              </div>
+
+              <div class="form-group">
+                <label for="notes">Notes</label>
+                <textarea
+                  id="notes"
+                  class="form-control"
+                  placeholder="Add any additional notes or observations..."
+                ></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn btn-danger" id="cancel-record">
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn-primary" id="save-record">
+                  Save Record
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- Laboratory Profile Section -->
+        <section id="lab-profile" class="section">
+          <div class="card">
+            <div class="card-header">
+              <h2>Laboratory Profile</h2>
+            </div>
+            <div class="card-body">
+              <div class="form-container">
+                <div class="form-group">
+                  <label for="lab-name-input">Laboratory Name</label>
+                  <input
+                    type="text"
+                    id="lab-name-input"
+                    class="form-control"
+                    value="Central Laboratory"
+                  />
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="lab-id-input">Laboratory ID</label>
+                    <input
+                      type="text"
+                      id="lab-id-input"
+                      class="form-control"
+                      value="LAB-12345"
+                      readonly
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="license-number">License Number</label>
+                    <input
+                      type="text"
+                      id="license-number"
+                      class="form-control"
+                      value="LIC-78901"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="lab-address">Address</label>
+                    <input
+                      type="text"
+                      id="lab-address"
+                      class="form-control"
+                      value="123 Medical Center Drive"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="lab-city">City</label>
+                    <input
+                      type="text"
+                      id="lab-city"
+                      class="form-control"
+                      value="Healthville"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="lab-state">State</label>
+                    <input
+                      type="text"
+                      id="lab-state"
+                      class="form-control"
+                      value="Medical State"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="lab-zip">Zip Code</label>
+                    <input
+                      type="text"
+                      id="lab-zip"
+                      class="form-control"
+                      value="12345"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="lab-phone">Phone Number</label>
+                    <input
+                      type="tel"
+                      id="lab-phone"
+                      class="form-control"
+                      value="(555) 123-4567"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="lab-email">Email</label>
+                    <input
+                      type="email"
+                      id="lab-email"
+                      class="form-control"
+                      value="contact@centrallaboratory.com"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="lab-description">Laboratory Description</label>
+                  <textarea id="lab-description" class="form-control" rows="4">
+Central Laboratory is a state-of-the-art medical testing facility dedicated to providing accurate and timely diagnostic services. Our team of certified technicians utilizes the latest equipment and methodologies to ensure reliable results.</textarea
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label>Available Test Types</label>
+                  <div class="checkbox-group">
+                    <div>
+                      <input type="checkbox" id="test-blood" checked />
+                      <label for="test-blood">Blood Work Panel</label>
+                    </div>
+                    <div>
+                      <input type="checkbox" id="test-lipid" checked />
+                      <label for="test-lipid">Lipid Panel</label>
+                    </div>
+                    <div>
+                      <input type="checkbox" id="test-liver" checked />
+                      <label for="test-liver">Liver Function</label>
+                    </div>
+                    <div>
+                      <input type="checkbox" id="test-kidney" checked />
+                      <label for="test-kidney">Kidney Function</label>
+                    </div>
+                    <div>
+                      <input type="checkbox" id="test-glucose" checked />
+                      <label for="test-glucose">Glucose Test</label>
+                    </div>
+                    <div>
+                      <input type="checkbox" id="test-thyroid" checked />
+                      <label for="test-thyroid">Thyroid Panel</label>
+                    </div>
+                    <div>
+                      <input type="checkbox" id="test-cbc" checked />
+                      <label for="test-cbc">Complete Blood Count</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button class="btn btn-danger" id="reset-profile">
+                    Reset
+                  </button>
+                  <button class="btn btn-primary" id="save-profile">
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Patient Detail Modal -->
+    <div class="modal-backdrop" id="patient-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 id="modal-patient-name">Patient Details</h2>
+          <button class="close-btn" id="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="patient-details">
+            <div class="patient-image">👤</div>
+            <div class="patient-info">
+              <h2 id="detail-patient-name">John Smith</h2>
+              <p>Patient ID: <span id="detail-patient-id">P-1001</span></p>
+              <p>
+                Age: <span id="detail-patient-age">45</span> | Gender:
+                <span id="detail-patient-gender">Male</span>
+              </p>
+              <p>
+                Contact: <span id="detail-patient-contact">(555) 987-6543</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="patient-tabs">
+            <div class="patient-tab active" data-tab="test-results">
+              Test Results
+            </div>
+          </div>
+
+          <div class="patient-tab-content active" id="test-results">
+            <h3>Recent Test Results</h3>
+            <div id="patient-test-results">
+              <!-- Content will be dynamically populated -->
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" id="add-test-btn">
+            Add New Test
+          </button>
+          <button class="btn btn-primary" id="print-report">
+            Print Report
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Patient Modal -->
+    <div class="modal-backdrop" id="add-patient-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>Add New Patient</h2>
+          <button class="close-btn" id="close-add-patient-modal">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="add-patient-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="new-patient-first-name">First Name</label>
+                <input
+                  type="text"
+                  id="new-patient-first-name"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="new-patient-last-name">Last Name</label>
+                <input
+                  type="text"
+                  id="new-patient-last-name"
+                  class="form-control"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="new-patient-dob">Date of Birth</label>
+                <input
+                  type="date"
+                  id="new-patient-dob"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="new-patient-gender">Gender</label>
+                <select id="new-patient-gender" class="form-control" required>
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="new-patient-phone">Phone Number</label>
+                <input
+                  type="tel"
+                  id="new-patient-phone"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="new-patient-email">Email</label>
+                <input
+                  type="email"
+                  id="new-patient-email"
+                  class="form-control"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="new-patient-address">Address</label>
+              <input
+                type="text"
+                id="new-patient-address"
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="new-patient-emergency-name"
+                  >Emergency Contact Name</label
+                >
+                <input
+                  type="text"
+                  id="new-patient-emergency-name"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label for="new-patient-emergency-phone"
+                  >Emergency Contact Phone</label
+                >
+                <input
+                  type="tel"
+                  id="new-patient-emergency-phone"
+                  class="form-control"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="new-patient-notes">Additional Notes</label>
+              <textarea id="new-patient-notes" class="form-control"></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="btn btn-danger"
+                id="cancel-add-patient"
+              >
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-primary">Add Patient</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirmation Dialog -->
+    <div class="confirm-dialog" id="confirm-dialog">
+      <div class="confirm-content">
+        <p class="confirm-message" id="confirm-message">
+          Are you sure you want to perform this action?
+        </p>
+        <div class="confirm-buttons">
+          <button class="btn btn-danger" id="confirm-cancel">Cancel</button>
+          <button class="btn btn-primary" id="confirm-ok">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <!-- JavaScript -->
+    <script>
+      // Data Storage
+      let patients = [
+        {
+          id: "P-1001",
+          firstName: "John",
+          lastName: "Smith",
+          age: 45,
+          dob: "1980-05-12",
+          gender: "Male",
+          lastTest: "2025-03-14",
+          phone: "(555) 987-6543",
+          email: "john.smith@example.com",
+          address: "456 Patient Street, Healthville, MS 12345",
+          emergencyContact: "Jane Smith (Wife) - (555) 987-6544",
+          bloodType: "O+",
+          medicalHistory: [
+            {
+              condition: "Hypertension",
+              diagnosed: "2022-03-15",
+              status: "Active",
+            },
+            {
+              condition: "Type 2 Diabetes",
+              diagnosed: "2023-01-10",
+              status: "Active",
+            },
+          ],
+        },
+        {
+          id: "P-1002",
+          firstName: "Sarah",
+          lastName: "Johnson",
+          age: 38,
+          dob: "1987-03-22",
+          gender: "Female",
+          lastTest: "2025-03-14",
+          phone: "(555) 456-7890",
+          email: "sarah.johnson@example.com",
+          address: "789 Health Ave, Medville, MS 12345",
+          emergencyContact: "Mike Johnson (Husband) - (555) 456-7891",
+          bloodType: "A+",
+          medicalHistory: [
+            {
+              condition: "Hypothyroidism",
+              diagnosed: "2020-07-10",
+              status: "Active",
+            },
+          ],
+        },
+        {
+          id: "P-1003",
+          firstName: "Michael",
+          lastName: "Brown",
+          age: 52,
+          dob: "1973-11-08",
+          gender: "Male",
+          lastTest: "2025-03-14",
+          phone: "(555) 234-5678",
+          email: "michael.brown@example.com",
+          address: "123 Wellness St, Healthville, MS 12345",
+          emergencyContact: "Laura Brown (Wife) - (555) 234-5679",
+          bloodType: "B+",
+          medicalHistory: [
+            {
+              condition: "Arthritis",
+              diagnosed: "2021-05-20",
+              status: "Active",
+            },
+            {
+              condition: "High Cholesterol",
+              diagnosed: "2022-02-15",
+              status: "Active",
+            },
+          ],
+        },
+        {
+          id: "P-1004",
+          firstName: "Emily",
+          lastName: "Davis",
+          age: 29,
+          dob: "1996-07-15",
+          gender: "Female",
+          lastTest: "2025-03-14",
+          phone: "(555) 345-6789",
+          email: "emily.davis@example.com",
+          address: "567 Care Lane, Medville, MS 12345",
+          emergencyContact: "Robert Davis (Father) - (555) 345-6780",
+          bloodType: "O-",
+          medicalHistory: [
+            { condition: "Asthma", diagnosed: "2010-03-12", status: "Active" },
+          ],
+        },
+        {
+          id: "P-1005",
+          firstName: "Robert",
+          lastName: "Wilson",
+          age: 61,
+          dob: "1964-01-30",
+          gender: "Male",
+          lastTest: "2025-03-14",
+          phone: "(555) 567-8901",
+          email: "robert.wilson@example.com",
+          address: "890 Healing Rd, Healthville, MS 12345",
+          emergencyContact: "Mary Wilson (Wife) - (555) 567-8902",
+          bloodType: "AB+",
+          medicalHistory: [
+            {
+              condition: "Coronary Artery Disease",
+              diagnosed: "2019-11-05",
+              status: "Active",
+            },
+            { condition: "GERD", diagnosed: "2020-06-18", status: "Active" },
+          ],
+        },
+        {
+          id: "P-1006",
+          firstName: "Jessica",
+          lastName: "Taylor",
+          age: 35,
+          dob: "1990-09-12",
+          gender: "Female",
+          lastTest: "2025-03-14",
+          phone: "(555) 678-9012",
+          email: "jessica.taylor@example.com",
+          address: "456 Wellness Ave, Medville, MS 12345",
+          emergencyContact: "David Taylor (Husband) - (555) 678-9013",
+          bloodType: "A-",
+          medicalHistory: [
+            {
+              condition: "Migraines",
+              diagnosed: "2018-04-25",
+              status: "Active",
+            },
+          ],
+        },
+        {
+          id: "P-1007",
+          firstName: "David",
+          lastName: "Anderson",
+          age: 42,
+          dob: "1983-12-05",
+          gender: "Male",
+          lastTest: "2025-03-14",
+          phone: "(555) 789-0123",
+          email: "david.anderson@example.com",
+          address: "234 Health Dr, Healthville, MS 12345",
+          emergencyContact: "Susan Anderson (Wife) - (555) 789-0124",
+          bloodType: "B-",
+          medicalHistory: [
+            {
+              condition: "Seasonal Allergies",
+              diagnosed: "2015-08-10",
+              status: "Active",
+            },
+          ],
+        },
+      ];
+
+      // Enhanced test results data for the laboratory dashboard
+      let testResults = [
+        {
+          id: "T-1001",
+          patientId: "P-1001",
+          testType: "Blood Work Panel",
+          date: "2025-03-14", // Today's date
+          status: "Completed",
+          results: {
+            wbc: 7.5,
+            rbc: 5.2,
+            hemoglobin: 14.8,
+            hematocrit: 44,
+            platelets: 235,
+            neutrophils: 60,
+          },
+        },
+        {
+          id: "T-1002",
+          patientId: "P-1002",
+          testType: "Lipid Panel",
+          date: "2025-03-14", // Today's date
+          status: "Critical",
+          results: {
+            totalCholesterol: 245,
+            ldl: 168,
+            hdl: 42,
+            triglycerides: 175,
+          },
+        },
+        {
+          id: "T-1003",
+          patientId: "P-1003",
+          testType: "Liver Function",
+          date: "2025-03-14", // Today's date
+          status: "Completed",
+          results: {
+            alt: 35,
+            ast: 28,
+            alp: 95,
+            bilirubin: 0.8,
+          },
+        },
+        {
+          id: "T-1004",
+          patientId: "P-1004",
+          testType: "Kidney Function",
+          date: "2025-03-14", // Today's date
+          status: "Pending",
+          results: {},
+        },
+        {
+          id: "T-1008",
+          patientId: "P-1006",
+          testType: "Complete Blood Count",
+          date: "2025-03-14", // Today's date
+          status: "Completed",
+          results: {
+            wbc: 6.3,
+            rbc: 4.7,
+            hemoglobin: 14.1,
+            hematocrit: 42,
+            platelets: 250,
+            mcv: 90,
+          },
+        },
+        {
+          id: "T-1009",
+          patientId: "P-1007",
+          testType: "Glucose Test",
+          date: "2025-03-14", // Today's date
+          status: "Critical",
+          results: {
+            fastingGlucose: 142,
+            hba1c: 6.8,
+          },
+        },
+        {
+          id: "T-1010",
+          patientId: "P-1005",
+          testType: "Thyroid Panel",
+          date: "2025-03-14", // Today's date
+          status: "Completed",
+          results: {
+            tsh: 2.4,
+            t4: 8.1,
+            t3: 115,
+            freeT4: 1.3,
+          },
+        },
+        {
+          id: "T-1005",
+          patientId: "P-1005",
+          testType: "Blood Work Panel",
+          date: "2025-03-12",
+          status: "Completed",
+          results: {
+            wbc: 6.8,
+            rbc: 4.9,
+            hemoglobin: 15.1,
+            hematocrit: 45,
+            platelets: 210,
+            neutrophils: 58,
+          },
+        },
+        {
+          id: "T-1006",
+          patientId: "P-1006",
+          testType: "Thyroid Panel",
+          date: "2025-03-11",
+          status: "Completed",
+          results: {
+            tsh: 1.8,
+            t4: 8.5,
+            t3: 120,
+            freeT4: 1.2,
+          },
+        },
+        {
+          id: "T-1007",
+          patientId: "P-1007",
+          testType: "Complete Blood Count",
+          date: "2025-03-10",
+          status: "Completed",
+          results: {
+            wbc: 7.2,
+            rbc: 5.0,
+            hemoglobin: 15.5,
+            hematocrit: 46,
+            platelets: 230,
+            mcv: 88,
+          },
+        },
+        {
+          id: "T-1011",
+          patientId: "P-1001",
+          testType: "Glucose Test",
+          date: "2025-03-09",
+          status: "Completed",
+          results: {
+            fastingGlucose: 112,
+            hba1c: 5.8,
+          },
+        },
+        {
+          id: "T-1012",
+          patientId: "P-1003",
+          testType: "Lipid Panel",
+          date: "2025-03-08",
+          status: "Completed",
+          results: {
+            totalCholesterol: 195,
+            ldl: 130,
+            hdl: 45,
+            triglycerides: 140,
+          },
+        },
+        {
+          id: "T-1013",
+          patientId: "P-1002",
+          testType: "Kidney Function",
+          date: "2025-03-08",
+          status: "Completed",
+          results: {
+            creatinine: 0.9,
+            urea: 15,
+            egfr: 85,
+            uricAcid: 5.4,
+          },
+        },
+        {
+          id: "T-1014",
+          patientId: "P-1004",
+          testType: "Thyroid Panel",
+          date: "2025-03-07",
+          status: "Completed",
+          results: {
+            tsh: 2.1,
+            t4: 7.9,
+            t3: 118,
+            freeT4: 1.1,
+          },
+        },
+        {
+          id: "T-1015",
+          patientId: "P-1005",
+          testType: "Liver Function",
+          date: "2025-03-06",
+          status: "Critical",
+          results: {
+            alt: 65,
+            ast: 60,
+            alp: 110,
+            bilirubin: 1.4,
+          },
+        },
+      ];
+
+      let labInfo = {
+        name: "Central Laboratory",
+        id: "LAB-12345",
+        license: "LIC-78901",
+        address: "123 Medical Center Drive",
+        city: "Healthville",
+        state: "Medical State",
+        zip: "12345",
+        phone: "(555) 123-4567",
+        email: "contact@centrallaboratory.com",
+        description:
+          "Central Laboratory is a state-of-the-art medical testing facility dedicated to providing accurate and timely diagnostic services. Our team of certified technicians utilizes the latest equipment and methodologies to ensure reliable results.",
+      };
+
+      // DOM Elements
+      const navItems = document.querySelectorAll(".nav-item");
+      const sections = document.querySelectorAll(".section");
+      const pageTitle = document.getElementById("page-title");
+      const patientModal = document.getElementById("patient-modal");
+      const modalClose = document.getElementById("modal-close");
+      const viewPatientBtns = document.querySelectorAll(".view-patient");
+      const addPatientBtn = document.getElementById("add-patient-btn");
+      const addPatientModal = document.getElementById("add-patient-modal");
+      const closeAddPatientModal = document.getElementById(
+        "close-add-patient-modal"
+      );
+      const addPatientForm = document.getElementById("add-patient-form");
+      const cancelAddPatient = document.getElementById("cancel-add-patient");
+      const logoutBtn = document.getElementById("logout-btn");
+      const patientTabs = document.querySelectorAll(".patient-tab");
+      const patientTabContents = document.querySelectorAll(
+        ".patient-tab-content"
+      );
+      const testTypeSelect = document.getElementById("test-type");
+      const bloodPanelFields = document.getElementById("blood-panel-fields");
+      const lipidPanelFields = document.getElementById("lipid-panel-fields");
+      const liverPanelFields = document.getElementById("liver-panel-fields");
+      const kidneyPanelFields = document.getElementById("kidney-panel-fields");
+      const glucosePanelFields = document.getElementById(
+        "glucose-panel-fields"
+      );
+      const thyroidPanelFields = document.getElementById(
+        "thyroid-panel-fields"
+      );
+      const cbcPanelFields = document.getElementById("cbc-panel-fields");
+      const saveProfileBtn = document.getElementById("save-profile");
+      const resetProfileBtn = document.getElementById("reset-profile");
+      const saveRecordBtn = document.getElementById("save-record");
+      const cancelRecordBtn = document.getElementById("cancel-record");
+      const labNameInput = document.getElementById("lab-name-input");
+      const labIdInput = document.getElementById("lab-id-input");
+      const labName = document.getElementById("lab-name");
+      const labId = document.getElementById("lab-id");
+      const patientSelect = document.getElementById("patient-select");
+      const collectionDateInput = document.getElementById("collection-date");
+      const recentTestsTable = document.getElementById("recent-tests-table");
+      const patientsTable = document.getElementById("patients-table");
+      const searchInput = document.getElementById("search-input");
+      const patientSearch = document.getElementById("patient-search");
+      const addTestBtn = document.getElementById("add-test-btn");
+      const printReportBtn = document.getElementById("print-report");
+      const fileUploadArea = document.getElementById("file-upload-area");
+      const fileInput = document.getElementById("file-input");
+      const fileName = document.getElementById("file-name");
+      const viewAllTestsBtn = document.getElementById("view-all-tests-btn");
+      const notification = document.getElementById("notification");
+      const confirmDialog = document.getElementById("confirm-dialog");
+      const confirmMessage = document.getElementById("confirm-message");
+      const confirmOkBtn = document.getElementById("confirm-ok");
+      const confirmCancelBtn = document.getElementById("confirm-cancel");
+      const recordForm = document.getElementById("record-form");
+
+      // Initialize the dashboard when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeDashboard();
+      });
+
+      // Initialize Dashboard
+      function initializeDashboard() {
+        // Set current date
+        const today = new Date().toISOString().split("T")[0];
+        if (collectionDateInput) {
+          collectionDateInput.value = today;
+        }
+
+        // Initialize navigation
+        initializeNavigation();
+
+        // Initialize patient tabs
+        initializePatientTabs();
+
+        // Initialize form controls
+        initializeFormControls();
+
+        // Populate patient select dropdown
+        populatePatientSelect();
+
+        // Render dashboard data
+        renderDashboardData();
+
+        // Render patient table
+        renderPatientTable();
+
+        // Render recent tests table
+        renderRecentTestsTable();
+
+        // Initialize search functionality
+        initializeSearch();
+
+        // Initialize modals
+        initializeModals();
+
+        // Initialize confirmation dialog
+        initializeConfirmDialog();
+
+        // Initialize file upload
+        initializeFileUpload();
+      }
+
+      // Initialize Navigation
+      function initializeNavigation() {
+        navItems.forEach((item) => {
+          item.addEventListener("click", function () {
+            const sectionId = this.getAttribute("data-section");
+
+            // Skip if it's the logout button
+            if (!sectionId) return;
+
+            // Update active navigation
+            navItems.forEach((nav) => nav.classList.remove("active"));
+            this.classList.add("active");
+
+            // Show selected section
+            sections.forEach((section) => section.classList.remove("active"));
+            document.getElementById(sectionId).classList.add("active");
+
+            // Update page title
+            pageTitle.textContent = this.textContent.trim();
+          });
+        });
+
+        // Logout functionality
+        logoutBtn.addEventListener("click", function () {
+          showConfirmDialog("Are you sure you want to logout?", function () {
+            showNotification(
+              "You have been logged out successfully",
+              "success"
+            );
+
+            // In a real app, this would redirect to the login page
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          });
+        });
+      }
+
+      // Initialize Patient Tabs
+      function initializePatientTabs() {
+        patientTabs.forEach((tab) => {
+          tab.addEventListener("click", function () {
+            const tabId = this.getAttribute("data-tab");
+
+            // Update active tab
+            patientTabs.forEach((t) => t.classList.remove("active"));
+            this.classList.add("active");
+
+            // Show selected tab content
+            patientTabContents.forEach((content) =>
+              content.classList.remove("active")
+            );
+            document.getElementById(tabId).classList.add("active");
+          });
+        });
+      }
+
+      // Initialize Form Controls
+      function initializeFormControls() {
+        // Show/hide test fields based on selection
+        testTypeSelect.addEventListener("change", function () {
+          // Hide all test panels
+          hideAllTestPanels();
+
+          // Show the selected panel
+          const selectedType = this.value;
+          if (selectedType === "blood") {
+            bloodPanelFields.style.display = "block";
+          } else if (selectedType === "lipid") {
+            lipidPanelFields.style.display = "block";
+          } else if (selectedType === "liver") {
+            liverPanelFields.style.display = "block";
+          } else if (selectedType === "kidney") {
+            kidneyPanelFields.style.display = "block";
+          } else if (selectedType === "glucose") {
+            glucosePanelFields.style.display = "block";
+          } else if (selectedType === "thyroid") {
+            thyroidPanelFields.style.display = "block";
+          } else if (selectedType === "cbc") {
+            cbcPanelFields.style.display = "block";
+          }
+        });
+
+        // Save laboratory profile
+        saveProfileBtn.addEventListener("click", function () {
+          // Update lab info
+          labInfo.name = labNameInput.value;
+          labInfo.id = labIdInput.value;
+          labInfo.license = document.getElementById("license-number").value;
+          labInfo.address = document.getElementById("lab-address").value;
+          labInfo.city = document.getElementById("lab-city").value;
+          labInfo.state = document.getElementById("lab-state").value;
+          labInfo.zip = document.getElementById("lab-zip").value;
+          labInfo.phone = document.getElementById("lab-phone").value;
+          labInfo.email = document.getElementById("lab-email").value;
+          labInfo.description =
+            document.getElementById("lab-description").value;
+
+          // Update displayed lab name in sidebar
+          labName.textContent = labInfo.name;
+          labId.textContent = "ID: " + labInfo.id;
+
+          showNotification(
+            "Laboratory profile updated successfully!",
+            "success"
+          );
+        });
+
+        // Reset laboratory profile
+        resetProfileBtn.addEventListener("click", function () {
+          // Reset form to original values
+          labNameInput.value = labInfo.name;
+          labIdInput.value = labInfo.id;
+          document.getElementById("license-number").value = labInfo.license;
+          document.getElementById("lab-address").value = labInfo.address;
+          document.getElementById("lab-city").value = labInfo.city;
+          document.getElementById("lab-state").value = labInfo.state;
+          document.getElementById("lab-zip").value = labInfo.zip;
+          document.getElementById("lab-phone").value = labInfo.phone;
+          document.getElementById("lab-email").value = labInfo.email;
+          document.getElementById("lab-description").value =
+            labInfo.description;
+
+          showNotification(
+            "Laboratory profile reset to original values",
+            "info"
+          );
+        });
+
+        // Save medical record
+        recordForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          saveTestRecord();
+        });
+
+        // Cancel record form
+        cancelRecordBtn.addEventListener("click", function () {
+          showConfirmDialog(
+            "Cancel this record? Any unsaved data will be lost.",
+            function () {
+              recordForm.reset();
+              hideAllTestPanels();
+
+              // Switch to dashboard
+              navigateToSection("dashboard");
+            }
+          );
+        });
+
+        // View all tests button
+        viewAllTestsBtn.addEventListener("click", function () {
+          navigateToSection("patients");
+        });
+
+        // Add test button in patient modal
+        addTestBtn.addEventListener("click", function () {
+          // Close the modal
+          toggleModal(patientModal, false);
+
+          // Navigate to add record section
+          navigateToSection("add-record");
+
+          // Set the patient in the dropdown
+          const patientId =
+            document.getElementById("detail-patient-id").textContent;
+          patientSelect.value = patientId;
+        });
+
+        // Print report button
+        printReportBtn.addEventListener("click", function () {
+          const patientName = document.getElementById(
+            "detail-patient-name"
+          ).textContent;
+          showNotification(`Printing report for ${patientName}...`, "info");
+
+          // In a real app, this would open a print dialog
+          setTimeout(() => {
+            window.print();
+          }, 500);
+        });
+      }
+
+      // Hide all test panels
+      function hideAllTestPanels() {
+        bloodPanelFields.style.display = "none";
+        lipidPanelFields.style.display = "none";
+        liverPanelFields.style.display = "none";
+        kidneyPanelFields.style.display = "none";
+        glucosePanelFields.style.display = "none";
+        thyroidPanelFields.style.display = "none";
+        cbcPanelFields.style.display = "none";
+      }
+
+      // Navigate to a section
+      function navigateToSection(sectionId) {
+        // Get the nav item with the matching data-section attribute
+        const navItem = document.querySelector(
+          `.nav-item[data-section="${sectionId}"]`
+        );
+        if (navItem) {
+          navItem.click();
+        }
+      }
+
+      // Populate patient select dropdown
+      function populatePatientSelect() {
+        patientSelect.innerHTML =
+          '<option value="">-- Select Patient --</option>';
+
+        patients.forEach((patient) => {
+          const option = document.createElement("option");
+          option.value = patient.id;
+          option.textContent = `${patient.firstName} ${patient.lastName} (${patient.id})`;
+          patientSelect.appendChild(option);
+        });
+      }
+
+      // Render dashboard data
+      function renderDashboardData() {
+        // Update stats
+        document.getElementById("tests-today-count").textContent =
+          testResults.filter(
+            (test) => test.date === new Date().toISOString().split("T")[0]
+          ).length || 0;
+
+        document.getElementById("total-patients-count").textContent =
+          patients.length;
+
+        document.getElementById("critical-results-count").textContent =
+          testResults.filter((test) => test.status === "Critical").length;
+
+        const completedTests = testResults.filter(
+          (test) => test.status === "Completed"
+        ).length;
+        const totalTests = testResults.length;
+        const completionRate =
+          totalTests > 0 ? Math.round((completedTests / totalTests) * 100) : 0;
+        document.getElementById(
+          "completion-rate"
+        ).textContent = `${completionRate}%`;
+      }
+
+      // Render patient table
+      function renderPatientTable(filteredPatients = null) {
+        const tbody = patientsTable.querySelector("tbody");
+        tbody.innerHTML = "";
+
+        const patientsToRender = filteredPatients || patients;
+
+        if (patientsToRender.length === 0) {
+          const tr = document.createElement("tr");
+          tr.innerHTML =
+            '<td colspan="6" style="text-align: center;">No patients found</td>';
+          tbody.appendChild(tr);
+          return;
+        }
+
+        patientsToRender.forEach((patient) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${patient.id}</td>
+            <td>${patient.firstName} ${patient.lastName}</td>
+            <td>${patient.age}</td>
+            <td>${patient.gender}</td>
+            <td>${formatDate(patient.lastTest)}</td>
+            <td>
+              <div class="action-btns">
+                <button class="btn btn-primary btn-sm view-patient" data-id="${
+                  patient.id
+                }">View</button>
+                <button class="btn btn-primary btn-sm add-test-for-patient" data-id="${
+                  patient.id
+                }">Add Test</button>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        // Add event listeners to the newly created buttons
+        document.querySelectorAll(".view-patient").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const patientId = this.getAttribute("data-id");
+            openPatientModal(patientId);
+          });
+        });
+
+        document.querySelectorAll(".add-test-for-patient").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const patientId = this.getAttribute("data-id");
+            navigateToSection("add-record");
+            patientSelect.value = patientId;
+          });
+        });
+      }
+
+      // Render recent tests table
+      function renderRecentTestsTable(filteredTests = null) {
+        const tbody = recentTestsTable.querySelector("tbody");
+        tbody.innerHTML = "";
+
+        // Get the 5 most recent tests, or use filtered tests if provided
+        const testsToRender =
+          filteredTests ||
+          [...testResults]
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
+            .slice(0, 5);
+
+        if (testsToRender.length === 0) {
+          const tr = document.createElement("tr");
+          tr.innerHTML =
+            '<td colspan="6" style="text-align: center;">No test results found</td>';
+          tbody.appendChild(tr);
+          return;
+        }
+
+        testsToRender.forEach((test) => {
+          const patient = patients.find((p) => p.id === test.patientId);
+          if (!patient) return;
+
+          const tr = document.createElement("tr");
+
+          // Determine badge class based on status
+          let badgeClass = "";
+          switch (test.status) {
+            case "Completed":
+              badgeClass = "badge-completed";
+              break;
+            case "Pending":
+              badgeClass = "badge-pending";
+              break;
+            case "Critical":
+              badgeClass = "badge-critical";
+              break;
+            default:
+              badgeClass = "";
+          }
+
+          tr.innerHTML = `
+            <td>${test.patientId}</td>
+            <td>${patient.firstName} ${patient.lastName}</td>
+            <td>${test.testType}</td>
+            <td>${formatDate(test.date)}</td>
+            <td><span class="badge ${badgeClass}">${test.status}</span></td>
+            <td>
+              <div class="action-btns">
+                <button class="btn btn-primary btn-sm view-patient" data-id="${
+                  patient.id
+                }">View</button>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        // Add event listeners to the newly created buttons
+        document
+          .querySelectorAll("#recent-tests-table .view-patient")
+          .forEach((btn) => {
+            btn.addEventListener("click", function () {
+              const patientId = this.getAttribute("data-id");
+              openPatientModal(patientId);
+            });
+          });
+      }
+
+      // Initialize search functionality
+      function initializeSearch() {
+        // Main search input
+        searchInput.addEventListener("input", function () {
+          const searchTerm = this.value.toLowerCase().trim();
+
+          if (searchTerm.length === 0) {
+            renderRecentTestsTable();
+            return;
+          }
+
+          // Filter tests by patient name or ID
+          const filteredTests = testResults.filter((test) => {
+            const patient = patients.find((p) => p.id === test.patientId);
+            if (!patient) return false;
+
+            return (
+              patient.id.toLowerCase().includes(searchTerm) ||
+              `${patient.firstName} ${patient.lastName}`
+                .toLowerCase()
+                .includes(searchTerm) ||
+              test.testType.toLowerCase().includes(searchTerm)
+            );
+          });
+
+          renderRecentTestsTable(filteredTests);
+        });
+
+        // Patient search input
+        patientSearch.addEventListener("input", function () {
+          const searchTerm = this.value.toLowerCase().trim();
+
+          if (searchTerm.length === 0) {
+            renderPatientTable();
+            return;
+          }
+
+          // Filter patients by name or ID
+          const filteredPatients = patients.filter(
+            (patient) =>
+              patient.id.toLowerCase().includes(searchTerm) ||
+              `${patient.firstName} ${patient.lastName}`
+                .toLowerCase()
+                .includes(searchTerm) ||
+              patient.gender.toLowerCase().includes(searchTerm) ||
+              (patient.lastTest &&
+                formatDate(patient.lastTest).toLowerCase().includes(searchTerm))
+          );
+
+          renderPatientTable(filteredPatients);
+        });
+      }
+
+      // Initialize modals
+      function initializeModals() {
+        // Close patient modal
+        modalClose.addEventListener("click", function () {
+          toggleModal(patientModal, false);
+        });
+
+        // Close when clicking outside the modal
+        patientModal.addEventListener("click", function (event) {
+          if (event.target === patientModal) {
+            toggleModal(patientModal, false);
+          }
+        });
+
+        // Add patient button
+        addPatientBtn.addEventListener("click", function () {
+          toggleModal(addPatientModal, true);
+        });
+
+        // Close add patient modal
+        closeAddPatientModal.addEventListener("click", function () {
+          toggleModal(addPatientModal, false);
+        });
+
+        // Close when clicking outside the modal
+        addPatientModal.addEventListener("click", function (event) {
+          if (event.target === addPatientModal) {
+            toggleModal(addPatientModal, false);
+          }
+        });
+
+        // Cancel add patient
+        cancelAddPatient.addEventListener("click", function () {
+          toggleModal(addPatientModal, false);
+        });
+
+        // Add patient form submission
+        addPatientForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          addNewPatient();
+        });
+      }
+
+      // Initialize confirmation dialog
+      function initializeConfirmDialog() {
+        // Close when clicking outside the dialog
+        confirmDialog.addEventListener("click", function (event) {
+          if (event.target === confirmDialog) {
+            toggleModal(confirmDialog, false);
+          }
+        });
+
+        // Cancel button
+        confirmCancelBtn.addEventListener("click", function () {
+          toggleModal(confirmDialog, false);
+        });
+      }
+
+      // Show confirmation dialog
+      function showConfirmDialog(message, onConfirm) {
+        confirmMessage.textContent = message;
+
+        // Remove previous event listener
+        const newConfirmBtn = confirmOkBtn.cloneNode(true);
+        confirmOkBtn.parentNode.replaceChild(newConfirmBtn, confirmOkBtn);
+
+        // Add new event listener
+        newConfirmBtn.addEventListener("click", function () {
+          if (typeof onConfirm === "function") {
+            onConfirm();
+          }
+          toggleModal(confirmDialog, false);
+        });
+
+        toggleModal(confirmDialog, true);
+      }
+
+      // Toggle modal visibility
+      function toggleModal(modal, show) {
+        if (show) {
+          modal.classList.add("active");
+        } else {
+          modal.classList.remove("active");
+        }
+      }
+
+      // Initialize file upload
+      function initializeFileUpload() {
+        fileUploadArea.addEventListener("click", function () {
+          fileInput.click();
+        });
+
+        fileUploadArea.addEventListener("dragover", function (e) {
+          e.preventDefault();
+          fileUploadArea.style.borderColor = "var(--secondary)";
+        });
+
+        fileUploadArea.addEventListener("dragleave", function () {
+          fileUploadArea.style.borderColor = "#ddd";
+        });
+
+        fileUploadArea.addEventListener("drop", function (e) {
+          e.preventDefault();
+          fileUploadArea.style.borderColor = "#ddd";
+
+          if (e.dataTransfer.files.length > 0) {
+            fileInput.files = e.dataTransfer.files;
+            updateFileInfo(e.dataTransfer.files[0].name);
+          }
+        });
+
+        fileInput.addEventListener("change", function () {
+          if (fileInput.files.length > 0) {
+            updateFileInfo(fileInput.files[0].name);
+          }
+        });
+      }
+
+      // Update file info
+      function updateFileInfo(name) {
+        fileName.textContent = `Selected file: ${name}`;
+      }
+
+      // Format date
+      function formatDate(dateString) {
+        if (!dateString) return "N/A";
+
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return dateString;
+
+        return date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
+      }
+
+      // Show notification
+      function showNotification(message, type = "success") {
+        notification.textContent = message;
+        notification.className = "notification";
+        notification.classList.add(type);
+        notification.classList.add("show");
+
+        setTimeout(() => {
+          notification.classList.remove("show");
+        }, 3000);
+      }
+
+      // Open patient modal with patient details
+      function openPatientModal(patientId) {
+        const patient = patients.find((p) => p.id === patientId);
+        if (!patient) {
+          showNotification("Patient not found", "error");
+          return;
+        }
+
+        // Set patient details
+        document.getElementById(
+          "modal-patient-name"
+        ).textContent = `Patient Details: ${patient.firstName} ${patient.lastName}`;
+        document.getElementById(
+          "detail-patient-name"
+        ).textContent = `${patient.firstName} ${patient.lastName}`;
+        document.getElementById("detail-patient-id").textContent = patient.id;
+        document.getElementById("detail-patient-age").textContent = patient.age;
+        document.getElementById("detail-patient-gender").textContent =
+          patient.gender;
+        document.getElementById("detail-patient-contact").textContent =
+          patient.phone;
+
+        // Populate test results
+        populatePatientTestResults(patient);
+
+        // Show the modal
+        toggleModal(patientModal, true);
+      }
+
+      // Populate patient test results
+      function populatePatientTestResults(patient) {
+        const container = document.getElementById("patient-test-results");
+        container.innerHTML = "";
+
+        // Get test results for this patient
+        const results = testResults
+          .filter((test) => test.patientId === patient.id)
+          .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        if (results.length === 0) {
+          container.innerHTML =
+            "<p>No test results available for this patient.</p>";
+          return;
+        }
+
+        results.forEach((test) => {
+          const div = document.createElement("div");
+          div.className = "test-result";
+
+          // Create header
+          const header = document.createElement("div");
+          header.className = "test-header";
+
+          const nameSpan = document.createElement("div");
+          nameSpan.className = "test-name";
+          nameSpan.textContent = test.testType;
+
+          const dateSpan = document.createElement("div");
+          dateSpan.className = "test-date";
+          dateSpan.textContent = formatDate(test.date);
+
+          header.appendChild(nameSpan);
+          header.appendChild(dateSpan);
+          div.appendChild(header);
+
+          // Create test values based on test type
+          if (test.status === "Pending") {
+            const pendingMessage = document.createElement("p");
+            pendingMessage.textContent = "Test results pending.";
+            pendingMessage.style.fontStyle = "italic";
+            div.appendChild(pendingMessage);
+          } else if (Object.keys(test.results).length > 0) {
+            // Create different views based on test type
+            if (test.testType === "Blood Work Panel") {
+              appendTestValue(
+                div,
+                "WBC (White Blood Cells)",
+                `${test.results.wbc} × 10³/μL`
+              );
+              appendTestValue(
+                div,
+                "RBC (Red Blood Cells)",
+                `${test.results.rbc} × 10⁶/μL`
+              );
+              appendTestValue(
+                div,
+                "Hemoglobin",
+                `${test.results.hemoglobin} g/dL`
+              );
+              appendTestValue(div, "Hematocrit", `${test.results.hematocrit}%`);
+              appendTestValue(
+                div,
+                "Platelets",
+                `${test.results.platelets} × 10³/μL`
+              );
+              appendTestValue(
+                div,
+                "Neutrophils",
+                `${test.results.neutrophils}%`
+              );
+            } else if (test.testType === "Lipid Panel") {
+              appendTestValue(
+                div,
+                "Total Cholesterol",
+                `${test.results.totalCholesterol} mg/dL`,
+                "",
+                test.results.totalCholesterol > 200
+              );
+              appendTestValue(
+                div,
+                "LDL Cholesterol",
+                `${test.results.ldl} mg/dL`,
+                "",
+                test.results.ldl > 100
+              );
+              appendTestValue(
+                div,
+                "HDL Cholesterol",
+                `${test.results.hdl} mg/dL`,
+                "",
+                test.results.hdl < 40
+              );
+              appendTestValue(
+                div,
+                "Triglycerides",
+                `${test.results.triglycerides} mg/dL`,
+                "",
+                test.results.triglycerides > 150
+              );
+            } else if (test.testType === "Liver Function") {
+              appendTestValue(div, "ALT", `${test.results.alt} U/L`);
+              appendTestValue(div, "AST", `${test.results.ast} U/L`);
+              appendTestValue(div, "ALP", `${test.results.alp} U/L`);
+              appendTestValue(
+                div,
+                "Total Bilirubin",
+                `${test.results.bilirubin} mg/dL`
+              );
+            } else if (test.testType === "Thyroid Panel") {
+              appendTestValue(div, "TSH", `${test.results.tsh} mIU/L`);
+              appendTestValue(div, "T4", `${test.results.t4} μg/dL`);
+              appendTestValue(div, "T3", `${test.results.t3} ng/dL`);
+              appendTestValue(div, "Free T4", `${test.results.freeT4} ng/dL`);
+            } else if (test.testType === "Complete Blood Count") {
+              appendTestValue(div, "WBC", `${test.results.wbc} × 10³/μL`);
+              appendTestValue(div, "RBC", `${test.results.rbc} × 10⁶/μL`);
+              appendTestValue(
+                div,
+                "Hemoglobin",
+                `${test.results.hemoglobin} g/dL`
+              );
+              appendTestValue(div, "Hematocrit", `${test.results.hematocrit}%`);
+              appendTestValue(
+                div,
+                "Platelets",
+                `${test.results.platelets} × 10³/μL`
+              );
+              appendTestValue(div, "MCV", `${test.results.mcv} fL`);
+            } else if (test.testType === "Glucose Test") {
+              appendTestValue(
+                div,
+                "Fasting Glucose",
+                `${test.results.fastingGlucose} mg/dL`,
+                "",
+                test.results.fastingGlucose > 126
+              );
+              appendTestValue(
+                div,
+                "HbA1c",
+                `${test.results.hba1c}%`,
+                "",
+                test.results.hba1c > 6.5
+              );
+            } else if (test.testType === "Kidney Function") {
+              appendTestValue(
+                div,
+                "Creatinine",
+                `${test.results.creatinine} mg/dL`
+              );
+              appendTestValue(
+                div,
+                "Blood Urea Nitrogen",
+                `${test.results.urea} mg/dL`
+              );
+              appendTestValue(
+                div,
+                "eGFR",
+                `${test.results.egfr} mL/min/1.73m²`
+              );
+              appendTestValue(
+                div,
+                "Uric Acid",
+                `${test.results.uricAcid} mg/dL`
+              );
+            }
+          }
+
+          container.appendChild(div);
+        });
+      }
+
+      // Append test value to container
+      function appendTestValue(
+        container,
+        label,
+        value,
+        range = "",
+        isAbnormal = false
+      ) {
+        const div = document.createElement("div");
+        div.className = "test-value";
+
+        const labelSpan = document.createElement("div");
+        labelSpan.textContent = label;
+
+        const valueSpan = document.createElement("div");
+        if (isAbnormal) {
+          valueSpan.className = "abnormal";
+        }
+
+        valueSpan.textContent = value;
+
+        div.appendChild(labelSpan);
+        div.appendChild(valueSpan);
+
+        container.appendChild(div);
+
+        if (range) {
+          const rangeDiv = document.createElement("div");
+          rangeDiv.className = "normal-range";
+          rangeDiv.textContent = `Reference range: ${range}`;
+          container.appendChild(rangeDiv);
+        }
+      }
+
+      // Add new patient
+      function addNewPatient() {
+        // Get form values
+        const firstName = document
+          .getElementById("new-patient-first-name")
+          .value.trim();
+        const lastName = document
+          .getElementById("new-patient-last-name")
+          .value.trim();
+        const dob = document.getElementById("new-patient-dob").value;
+        const gender = document.getElementById("new-patient-gender").value;
+        const phone = document.getElementById("new-patient-phone").value.trim();
+        const email = document.getElementById("new-patient-email").value.trim();
+        const address = document
+          .getElementById("new-patient-address")
+          .value.trim();
+        const emergencyName = document
+          .getElementById("new-patient-emergency-name")
+          .value.trim();
+        const emergencyPhone = document
+          .getElementById("new-patient-emergency-phone")
+          .value.trim();
+        const notes = document.getElementById("new-patient-notes").value.trim();
+
+        // Calculate age from DOB
+        const today = new Date();
+        const birthDate = new Date(dob);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+
+        // Create emergency contact string
+        let emergencyContact = "";
+        if (emergencyName && emergencyPhone) {
+          emergencyContact = `${emergencyName} - ${emergencyPhone}`;
+        }
+
+        // Generate patient ID (P-xxxx where xxxx is sequentially increasing)
+        const lastPatientId =
+          patients.length > 0
+            ? parseInt(patients[patients.length - 1].id.replace("P-", ""))
+            : 1000;
+        const newPatientId = `P-${lastPatientId + 1}`;
+
+        // Create new patient object
+        const newPatient = {
+          id: newPatientId,
+          firstName,
+          lastName,
+          age,
+          dob,
+          gender,
+          lastTest: today.toISOString().split("T")[0], // Today's date
+          phone,
+          email,
+          address,
+          emergencyContact,
+          bloodType: "", // This would typically be set later
+          medicalHistory: [], // No medical history initially
+        };
+
+        // Add to patients array
+        patients.push(newPatient);
+
+        // Update UI
+        populatePatientSelect();
+        renderPatientTable();
+        renderDashboardData();
+
+        // Show success message
+        showNotification(
+          `Patient ${firstName} ${lastName} added successfully`,
+          "success"
+        );
+
+        // Close modal
+        toggleModal(addPatientModal, false);
+
+        // Reset form
+        addPatientForm.reset();
+      }
+
+      // Save test record
+      function saveTestRecord() {
+        // Validate required fields
+        const patientId = patientSelect.value;
+        const testType = testTypeSelect.value;
+        const collectionDate = document.getElementById("collection-date").value;
+        const collectionTime = document.getElementById("collection-time").value;
+
+        if (!patientId || !testType || !collectionDate || !collectionTime) {
+          showNotification("Please fill in all required fields", "error");
+          return;
+        }
+
+        // Generate test ID (T-xxxx where xxxx is sequentially increasing)
+        const lastTestId =
+          testResults.length > 0
+            ? parseInt(testResults[testResults.length - 1].id.replace("T-", ""))
+            : 1000;
+        const newTestId = `T-${lastTestId + 1}`;
+
+        // Prepare results object based on test type
+        let results = {};
+        let status = "Completed"; // Default status
+
+        if (testType === "blood") {
+          results = {
+            wbc: parseFloat(document.getElementById("wbc").value) || 0,
+            rbc: parseFloat(document.getElementById("rbc").value) || 0,
+            hemoglobin:
+              parseFloat(document.getElementById("hemoglobin").value) || 0,
+            hematocrit:
+              parseFloat(document.getElementById("hematocrit").value) || 0,
+            platelets:
+              parseFloat(document.getElementById("platelets").value) || 0,
+            neutrophils:
+              parseFloat(document.getElementById("neutrophils").value) || 0,
+          };
+
+          // Check for abnormal values
+          if (
+            results.wbc < 4.5 ||
+            results.wbc > 11.0 ||
+            results.hemoglobin < 13.5 ||
+            results.hemoglobin > 17.5
+          ) {
+            status = "Critical";
+          }
+        } else if (testType === "lipid") {
+          results = {
+            totalCholesterol:
+              parseFloat(document.getElementById("total-cholesterol").value) ||
+              0,
+            ldl:
+              parseFloat(document.getElementById("ldl-cholesterol").value) || 0,
+            hdl:
+              parseFloat(document.getElementById("hdl-cholesterol").value) || 0,
+            triglycerides:
+              parseFloat(document.getElementById("triglycerides").value) || 0,
+          };
+
+          // Check for abnormal values
+          if (
+            results.totalCholesterol > 240 ||
+            results.ldl > 160 ||
+            results.hdl < 40
+          ) {
+            status = "Critical";
+          }
+        } else if (testType === "liver") {
+          results = {
+            alt: parseFloat(document.getElementById("alt").value) || 0,
+            ast: parseFloat(document.getElementById("ast").value) || 0,
+            alp: parseFloat(document.getElementById("alp").value) || 0,
+            bilirubin:
+              parseFloat(document.getElementById("bilirubin").value) || 0,
+          };
+
+          // Check for abnormal values
+          if (results.alt > 56 || results.ast > 48 || results.bilirubin > 1.2) {
+            status = "Critical";
+          }
+        } else if (testType === "kidney") {
+          results = {
+            creatinine:
+              parseFloat(document.getElementById("creatinine").value) || 0,
+            urea: parseFloat(document.getElementById("urea").value) || 0,
+            egfr: parseFloat(document.getElementById("egfr").value) || 0,
+            uricAcid:
+              parseFloat(document.getElementById("uric-acid").value) || 0,
+          };
+
+          // Check for abnormal values
+          if (
+            results.creatinine > 1.3 ||
+            results.urea > 20 ||
+            results.egfr < 60
+          ) {
+            status = "Critical";
+          }
+        } else if (testType === "glucose") {
+          results = {
+            fastingGlucose:
+              parseFloat(document.getElementById("fasting-glucose").value) || 0,
+            hba1c: parseFloat(document.getElementById("hba1c").value) || 0,
+          };
+
+          // Check for abnormal values
+          if (results.fastingGlucose > 126 || results.hba1c > 6.5) {
+            status = "Critical";
+          }
+        } else if (testType === "thyroid") {
+          results = {
+            tsh: parseFloat(document.getElementById("tsh").value) || 0,
+            t4: parseFloat(document.getElementById("t4").value) || 0,
+            t3: parseFloat(document.getElementById("t3").value) || 0,
+            freeT4: parseFloat(document.getElementById("free-t4").value) || 0,
+          };
+
+          // Check for abnormal values
+          if (results.tsh < 0.4 || results.tsh > 4.0) {
+            status = "Critical";
+          }
+        } else if (testType === "cbc") {
+          results = {
+            wbc: parseFloat(document.getElementById("wbc-cbc").value) || 0,
+            rbc: parseFloat(document.getElementById("rbc-cbc").value) || 0,
+            hemoglobin:
+              parseFloat(document.getElementById("hemoglobin-cbc").value) || 0,
+            hematocrit:
+              parseFloat(document.getElementById("hematocrit-cbc").value) || 0,
+            platelets:
+              parseFloat(document.getElementById("platelets-cbc").value) || 0,
+            mcv: parseFloat(document.getElementById("mcv").value) || 0,
+          };
+
+          // Check for abnormal values
+          if (
+            results.wbc < 4.5 ||
+            results.wbc > 11.0 ||
+            results.hemoglobin < 13.5 ||
+            results.hemoglobin > 17.5 ||
+            results.platelets < 150 ||
+            results.platelets > 400
+          ) {
+            status = "Critical";
+          }
+        }
+
+        // Get notes
+        const notes = document.getElementById("notes").value.trim();
+
+        // Check if file was uploaded
+        const hasFile = fileInput.files.length > 0;
+
+        // If no results and no file, mark as pending
+        if (
+          Object.keys(results).every((key) => results[key] === 0) &&
+          !hasFile
+        ) {
+          status = "Pending";
+        }
+
+        // Create new test result object
+        const newTest = {
+          id: newTestId,
+          patientId,
+          testType: getTestTypeName(testType),
+          date: collectionDate,
+          status,
+          results,
+          notes,
+        };
+
+        // Add to test results array
+        testResults.push(newTest);
+
+        // Update patient's last test date
+        const patientIndex = patients.findIndex((p) => p.id === patientId);
+        if (patientIndex !== -1) {
+          patients[patientIndex].lastTest = collectionDate;
+        }
+
+        // Update UI
+        renderRecentTestsTable();
+        renderPatientTable();
+        renderDashboardData();
+
+        // Show success message
+        showNotification(`Test record saved successfully`, "success");
+
+        // Reset form
+        recordForm.reset();
+        hideAllTestPanels();
+        fileName.textContent = "";
+
+        // Navigate back to dashboard
+        navigateToSection("dashboard");
+      }
+
+      // Get full test type name from code
+      function getTestTypeName(code) {
+        switch (code) {
+          case "blood":
+            return "Blood Work Panel";
+          case "lipid":
+            return "Lipid Panel";
+          case "liver":
+            return "Liver Function";
+          case "kidney":
+            return "Kidney Function";
+          case "glucose":
+            return "Glucose Test";
+          case "thyroid":
+            return "Thyroid Panel";
+          case "cbc":
+            return "Complete Blood Count";
+          default:
+            return code;
+        }
+      }
+
+      // Function to handle AI Assistant (simplified for demo)
+      function openAIAssistant() {
+        // In a real application, this would connect to an AI service
+        showNotification(
+          "AI Assistant would open here. This feature is not implemented in the demo.",
+          "info"
+        );
+      }
+    </script>
+  </body>
+</html>

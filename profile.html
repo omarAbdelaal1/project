@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Profile - Curinai</title>
+    <style>
+      :root {
+        --main-color: #2563eb;
+        --second-color: #1d4ed8;
+        --third-color: #1e40af;
+        --transition-time: 0.4s;
+        --light-gray: #f5f5f5;
+        --medium-gray: #e0e0e0;
+        --dark-gray: #333;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: #f5f5f5;
+        color: #333;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .active {
+        padding-bottom: 20px;
+        border-bottom: 3px solid var(--main-color);
+        color: var(--main-color) !important;
+      }
+
+      /* Navigation */
+      nav {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 1rem 5%;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        transition: all var(--transition-time) ease;
+      }
+
+      nav:hover {
+        background: rgba(255, 255, 255, 1);
+      }
+
+      .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .logo {
+        color: var(--main-color);
+        font-size: 1.7rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        text-decoration: none;
+        position: relative;
+      }
+
+      .logo::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 3px;
+        background-color: var(--main-color);
+        transition: width 0.4s ease;
+      }
+
+      .logo:hover {
+        transform: scale(1.05);
+      }
+
+      .logo:hover::after {
+        width: 100%;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #4b5563;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 5px 0;
+      }
+
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--main-color);
+        transition: width 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        color: var(--main-color);
+      }
+
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        right: 0;
+        border-radius: 4px;
+      }
+
+      .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+      }
+
+      .dropdown-content a:hover {
+        background-color: #f1f1f1;
+      }
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+
+      .user-greeting {
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 4px;
+        background-color: var(--main-color);
+        color: white;
+      }
+
+      /* Profile Content */
+      .main-content {
+        margin-top: 80px;
+        padding: 30px 0;
+      }
+
+      .profile-container {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .profile-header {
+        background: linear-gradient(
+          to right,
+          var(--main-color),
+          var(--second-color)
+        );
+        color: white;
+        padding: 30px;
+        position: relative;
+      }
+
+      .profile-header h1 {
+        margin-bottom: 10px;
+      }
+
+      .profile-photo {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background-color: white;
+        border: 4px solid white;
+        overflow: hidden;
+        position: absolute;
+        bottom: -60px;
+        right: 30px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+      }
+
+      .profile-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .profile-body {
+        padding: 80px 30px 30px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+      }
+
+      .profile-sidebar {
+        flex: 0 0 250px;
+      }
+
+      .profile-menu {
+        list-style: none;
+        background-color: var(--light-gray);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .profile-menu li {
+        padding: 15px 20px;
+        border-bottom: 1px solid var(--medium-gray);
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .profile-menu li:last-child {
+        border-bottom: none;
+      }
+
+      .profile-menu li:hover {
+        background-color: #e6f7ff;
+      }
+
+      .profile-menu li.active {
+        background-color: var(--main-color);
+        color: white !important;
+      }
+
+      .profile-content {
+        flex: 1;
+        min-width: 300px;
+      }
+
+      .profile-section {
+        display: none;
+      }
+
+      .profile-section.active {
+        display: block;
+      }
+
+      .section-title {
+        color: var(--main-color);
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--medium-gray);
+      }
+
+      .info-group {
+        margin-bottom: 25px;
+      }
+
+      .info-label {
+        font-weight: bold;
+        color: var(--dark-gray);
+        margin-bottom: 5px;
+      }
+
+      .info-value {
+        color: #555;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--medium-gray);
+        border-radius: 5px;
+        font-size: 16px;
+        transition: border-color 0.3s;
+      }
+
+      .form-control:focus {
+        border-color: var(--main-color);
+        outline: none;
+        box-shadow: 0 0 5px rgba(37, 99, 235, 0.3);
+      }
+
+      .btn {
+        padding: 10px 20px;
+        background-color: var(--main-color);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+      }
+
+      .btn:hover {
+        background-color: var(--second-color);
+      }
+
+      .btn-danger {
+        background-color: #e74c3c;
+      }
+
+      .btn-danger:hover {
+        background-color: #c0392b;
+      }
+
+      .form-row {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .form-row .form-group {
+        flex: 1;
+        margin-bottom: 0;
+      }
+
+      /* AI Button Style */
+      .ai-button {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        background-color: #1a73e8;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+        transition: all 0.3s ease;
+      }
+
+      .ai-button:hover {
+        background-color: #1557b0;
+        transform: scale(1.05);
+      }
+
+      /* Chat Container Style */
+      .chat-container {
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        width: 350px;
+        height: 450px;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 998;
+        border: 1px solid #e0e0e0;
+      }
+
+      .chat-container.active {
+        display: flex;
+      }
+
+      .chat-header {
+        background-color: #1a73e8;
+        color: white;
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .chat-header h3 {
+        margin: 0;
+        font-size: 16px;
+      }
+
+      .close-chat {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+      }
+
+      .chat-messages {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        background-color: #f5f8ff;
+      }
+
+      .message {
+        margin-bottom: 15px;
+        max-width: 80%;
+        padding: 10px 15px;
+        border-radius: 15px;
+        line-height: 1.4;
+        font-size: 14px;
+      }
+
+      .bot-message {
+        background-color: #e3f2fd;
+        color: #333;
+        border-top-left-radius: 5px;
+        align-self: flex-start;
+      }
+
+      .user-message {
+        background-color: #1a73e8;
+        color: white;
+        margin-left: auto;
+        border-top-right-radius: 5px;
+      }
+
+      .chat-input-container {
+        display: flex;
+        padding: 10px;
+        border-top: 1px solid #e0e0e0;
+        background-color: white;
+      }
+
+      .chat-input {
+        flex: 1;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        outline: none;
+        font-size: 14px;
+      }
+
+      .send-button {
+        background-color: #1a73e8;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        margin-left: 10px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .send-button:hover {
+        background-color: #1557b0;
+      }
+
+      .typing-indicator {
+        display: none;
+        margin: 10px 0;
+      }
+
+      .typing-indicator span {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        margin-right: 3px;
+        background-color: #bbb;
+        border-radius: 50%;
+        animation: typingAnimation 1.5s infinite ease-in-out;
+      }
+
+      .typing-indicator span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .typing-indicator span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes typingAnimation {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        .profile-body {
+          flex-direction: column;
+        }
+
+        .profile-sidebar {
+          flex: 1 0 100%;
+        }
+
+        .form-row {
+          flex-direction: column;
+          gap: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav>
+      <div class="nav-container">
+        <div>
+          <a href="home.html" class="logo">Curinai</a>
+        </div>
+        <div class="nav-links">
+          <a href="home.html">Home</a>
+          <a href="doctors.html">Doctors</a>
+          <a href="medical.html">Medical Records</a>
+          <a href="shop.html">Medical Shop</a>
+          <a href="contact.html">Contact</a>
+          <div id="userSection">
+            <div class="dropdown">
+              <span class="user-greeting">John Doe ▼</span>
+              <div class="dropdown-content">
+                <a href="profile.html" class="active">My Profile</a>
+                <a href="medical.html">Medical Records</a>
+                <a href="#" onclick="handleSignOut()">Sign Out</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container main-content">
+      <div class="profile-container">
+        <div class="profile-header">
+          <h1>My Profile</h1>
+          <p>Manage your personal information and account settings</p>
+          <div class="profile-photo" id="profile-photo">
+            <img id="profileImage" src="m.jpg" alt="Profile Photo" />
+          </div>
+        </div>
+
+        <div class="profile-body">
+          <div class="profile-sidebar">
+            <ul class="profile-menu">
+              <li class="active" data-section="personal-info">
+                Personal Information
+              </li>
+              <li data-section="account-settings">Account Settings</li>
+              <li data-section="security">Security</li>
+              <li data-section="notifications">Notifications</li>
+              <li onclick="handleSignOut()">Sign Out</li>
+            </ul>
+          </div>
+
+          <div class="profile-content">
+            <!-- Personal Information Section -->
+            <div id="personal-info" class="profile-section active">
+              <h2 class="section-title">Personal Information</h2>
+
+              <div class="info-group">
+                <div class="info-label">Full Name</div>
+                <div class="info-value">John Doe</div>
+              </div>
+
+              <div class="info-group">
+                <div class="info-label">Date of Birth</div>
+                <div class="info-value">May 15, 1980</div>
+              </div>
+
+              <div class="info-group">
+                <div class="info-label">Gender</div>
+                <div class="info-value">Male</div>
+              </div>
+
+              <div class="info-group">
+                <div class="info-label">Blood Type</div>
+                <div class="info-value">O+</div>
+              </div>
+
+              <div class="info-group">
+                <div class="info-label">Email</div>
+                <div class="info-value">john.doe@example.com</div>
+              </div>
+
+              <div class="info-group">
+                <div class="info-label">Phone</div>
+                <div class="info-value">(555) 123-4567</div>
+              </div>
+
+              <div class="info-group">
+                <div class="info-label">Address</div>
+                <div class="info-value">123 Main Street, Anytown, CA 12345</div>
+              </div>
+
+              <div class="info-group">
+                <div class="info-label">Emergency Contact</div>
+                <div class="info-value">Jane Doe (Wife) - (555) 987-6543</div>
+              </div>
+
+              <button class="btn" id="editPersonalInfo">
+                Edit Information
+              </button>
+            </div>
+
+            <!-- Account Settings Section -->
+            <div id="account-settings" class="profile-section">
+              <h2 class="section-title">Account Settings</h2>
+
+              <form id="accountSettingsForm">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input
+                      type="text"
+                      id="firstName"
+                      class="form-control"
+                      value="John"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input
+                      type="text"
+                      id="lastName"
+                      class="form-control"
+                      value="Doe"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="email">Email</label>
+                    <input
+                      type="email"
+                      id="email"
+                      class="form-control"
+                      value="john.doe@example.com"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      class="form-control"
+                      value="(555) 123-4567"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="address">Address</label>
+                  <input
+                    type="text"
+                    id="address"
+                    class="form-control"
+                    value="123 Main Street, Anytown, CA 12345"
+                  />
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input
+                      type="date"
+                      id="dob"
+                      class="form-control"
+                      value="1980-05-15"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" class="form-control">
+                      <option value="male" selected>Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="bloodType">Blood Type</label>
+                    <select id="bloodType" class="form-control">
+                      <option value="A+">A+</option>
+                      <option value="A-">A-</option>
+                      <option value="B+">B+</option>
+                      <option value="B-">B-</option>
+                      <option value="AB+">AB+</option>
+                      <option value="AB-">AB-</option>
+                      <option value="O+" selected>O+</option>
+                      <option value="O-">O-</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="language">Preferred Language</label>
+                    <select id="language" class="form-control">
+                      <option value="english" selected>English</option>
+                      <option value="spanish">Spanish</option>
+                      <option value="french">French</option>
+                      <option value="german">German</option>
+                      <option value="chinese">Chinese</option>
+                      <option value="arabic">Arabic</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="emergencyContact">Emergency Contact</label>
+                  <input
+                    type="text"
+                    id="emergencyContact"
+                    class="form-control"
+                    value="Jane Doe (Wife) - (555) 987-6543"
+                  />
+                </div>
+
+                <button type="submit" class="btn">Save Changes</button>
+              </form>
+            </div>
+
+            <!-- Security Section -->
+            <div id="security" class="profile-section">
+              <h2 class="section-title">Security</h2>
+
+              <form id="securityForm">
+                <div class="form-group">
+                  <label for="currentPassword">Current Password</label>
+                  <input
+                    type="password"
+                    id="currentPassword"
+                    class="form-control"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="newPassword">New Password</label>
+                  <input
+                    type="password"
+                    id="newPassword"
+                    class="form-control"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="confirmPassword">Confirm New Password</label>
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    class="form-control"
+                  />
+                </div>
+
+                <button type="submit" class="btn">Update Password</button>
+              </form>
+
+              <div style="margin-top: 40px">
+                <h3 style="margin-bottom: 15px">Two-Factor Authentication</h3>
+                <p style="margin-bottom: 15px">
+                  Add an extra layer of security to your account by enabling
+                  two-factor authentication.
+                </p>
+                <button class="btn" id="enableTwoFactor">
+                  Enable Two-Factor Authentication
+                </button>
+              </div>
+
+              <div style="margin-top: 40px">
+                <h3 style="margin-bottom: 15px; color: #e74c3c">
+                  Delete Account
+                </h3>
+                <p style="margin-bottom: 15px">
+                  Once you delete your account, there is no going back. Please
+                  be certain.
+                </p>
+                <button class="btn btn-danger" id="deleteAccount">
+                  Delete My Account
+                </button>
+              </div>
+            </div>
+
+            <!-- Notifications Section -->
+            <div id="notifications" class="profile-section">
+              <h2 class="section-title">Notifications</h2>
+
+              <form id="notificationsForm">
+                <div class="info-group">
+                  <div class="info-label">Email Notifications</div>
+                  <div style="margin-top: 10px">
+                    <div style="margin-bottom: 10px">
+                      <input type="checkbox" id="emailAppointments" checked />
+                      <label for="emailAppointments" style="display: inline"
+                        >Appointment Reminders</label
+                      >
+                    </div>
+                    <div style="margin-bottom: 10px">
+                      <input type="checkbox" id="emailMedications" checked />
+                      <label for="emailMedications" style="display: inline"
+                        >Medication Reminders</label
+                      >
+                    </div>
+                    <div style="margin-bottom: 10px">
+                      <input type="checkbox" id="emailNewsletter" checked />
+                      <label for="emailNewsletter" style="display: inline"
+                        >Health Tips & Newsletter</label
+                      >
+                    </div>
+                    <div style="margin-bottom: 10px">
+                      <input type="checkbox" id="emailLabResults" checked />
+                      <label for="emailLabResults" style="display: inline"
+                        >Lab Results Available</label
+                      >
+                    </div>
+                    <div style="margin-bottom: 10px">
+                      <input type="checkbox" id="emailPromotions" />
+                      <label for="emailPromotions" style="display: inline"
+                        >Promotions and Special Offers</label
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <div class="info-group">
+                  <div class="info-label">SMS Notifications</div>
+                  <div style="margin-top: 10px">
+                    <div style="margin-bottom: 10px">
+                      <input type="checkbox" id="smsAppointments" checked />
+                      <label for="smsAppointments" style="display: inline"
+                        >Appointment Reminders</label
+                      >
+                    </div>
+                    <div style="margin-bottom: 10px">
+                      <input type="checkbox" id="smsMedications" />
+                      <label for="smsMedications" style="display: inline"
+                        >Medication Reminders</label
+                      >
+                    </div>
+                    <div style="margin-bottom: 10px">
+                      <input type="checkbox" id="smsLabResults" />
+                      <label for="smsLabResults" style="display: inline"
+                        >Lab Results Available</label
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn">Save Preferences</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Chat Button -->
+    <div class="ai-button" id="aiButton">AI</div>
+
+    <!-- Chat Container -->
+    <div class="chat-container" id="chatContainer">
+      <div class="chat-header">
+        <h3>Curinai Health Assistant</h3>
+        <button class="close-chat" id="closeChat">×</button>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot-message">
+          Hello! I'm your Curinai Health Assistant. How can I help you today?
+        </div>
+      </div>
+
+      <div class="typing-indicator" id="typingIndicator">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <div class="chat-input-container">
+        <input
+          type="text"
+          class="chat-input"
+          id="chatInput"
+          placeholder="Type your message here..."
+        />
+        <button class="send-button" id="sendButton">→</button>
+      </div>
+    </div>
+
+    <script>
+      // Variables
+      let currentUser = {
+        name: "John Doe",
+        email: "john.doe@example.com",
+      };
+
+      // Wait for the DOM to be fully loaded
+      document.addEventListener("DOMContentLoaded", function () {
+        // Initialize functionality
+        setupNavigation();
+        setupProfileSections();
+        setupForms();
+        setupChatFunctionality();
+        setupProfilePhoto();
+        setupDeleteAccount();
+        setupTwoFactorAuth();
+      });
+
+      // Setup navigation functionality
+      function setupNavigation() {
+        // Function to show home page
+        window.showHome = function () {
+          window.location.href = "home.html";
+        };
+
+        // Navigation between profile sections
+        document.querySelectorAll(".profile-menu li").forEach((item) => {
+          if (!item.hasAttribute("onclick")) {
+            // Skip the sign out option
+            item.addEventListener("click", function () {
+              // Update active menu item
+              document
+                .querySelectorAll(".profile-menu li")
+                .forEach((menuItem) => {
+                  menuItem.classList.remove("active");
+                });
+              this.classList.add("active");
+
+              // Show corresponding section
+              const sectionId = this.getAttribute("data-section");
+              document
+                .querySelectorAll(".profile-section")
+                .forEach((section) => {
+                  section.classList.remove("active");
+                });
+              document.getElementById(sectionId).classList.add("active");
+            });
+          }
+        });
+      }
+
+      // Setup profile sections
+      function setupProfileSections() {
+        // Edit Personal Info button
+        document
+          .getElementById("editPersonalInfo")
+          .addEventListener("click", function () {
+            // Switch to Account Settings tab
+            document
+              .querySelectorAll(".profile-menu li")
+              .forEach((menuItem) => {
+                menuItem.classList.remove("active");
+                if (
+                  menuItem.getAttribute("data-section") === "account-settings"
+                ) {
+                  menuItem.classList.add("active");
+                }
+              });
+
+            // Show account settings section
+            document.querySelectorAll(".profile-section").forEach((section) => {
+              section.classList.remove("active");
+            });
+            document.getElementById("account-settings").classList.add("active");
+          });
+      }
+
+      // Setup forms functionality
+      function setupForms() {
+        // Handle Account Settings Form Submission
+        document
+          .getElementById("accountSettingsForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            // Validate form fields (basic validation)
+            const firstName = document.getElementById("firstName").value.trim();
+            const lastName = document.getElementById("lastName").value.trim();
+            const email = document.getElementById("email").value.trim();
+
+            if (!firstName || !lastName || !email) {
+              showNotification("Please fill in all required fields.", "error");
+              return;
+            }
+
+            // In a real application, you would save the form data to a server
+            showNotification("Account information updated successfully!");
+
+            // Update displayed information in Personal Information section
+            document.querySelector("#personal-info .info-value").textContent =
+              firstName + " " + lastName;
+          });
+
+        // Handle Security Form Submission
+        document
+          .getElementById("securityForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            const currentPassword =
+              document.getElementById("currentPassword").value;
+            const newPassword = document.getElementById("newPassword").value;
+            const confirmPassword =
+              document.getElementById("confirmPassword").value;
+
+            if (!currentPassword || !newPassword || !confirmPassword) {
+              showNotification("Please fill in all password fields.", "error");
+              return;
+            }
+
+            if (newPassword !== confirmPassword) {
+              showNotification("New passwords do not match.", "error");
+              return;
+            }
+
+            // In a real application, you would validate the current password and update the password
+            showNotification("Password updated successfully!");
+            this.reset();
+          });
+
+        // Handle Notifications Form Submission
+        document
+          .getElementById("notificationsForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            // In a real application, you would save the notification preferences
+            showNotification("Notification preferences saved!");
+          });
+      }
+
+      // Setup Delete Account functionality
+      function setupDeleteAccount() {
+        document
+          .getElementById("deleteAccount")
+          .addEventListener("click", function () {
+            if (
+              confirm(
+                "Are you sure you want to delete your account? This action cannot be undone."
+              )
+            ) {
+              // In a real application, you would send a request to delete the account
+              showNotification(
+                "Account deletion request submitted. You will receive a confirmation email."
+              );
+              setTimeout(() => {
+                window.location.href = "home.html";
+              }, 3000);
+            }
+          });
+      }
+
+      // Setup Two-Factor Authentication
+      function setupTwoFactorAuth() {
+        document
+          .getElementById("enableTwoFactor")
+          .addEventListener("click", function () {
+            // In a real application, this would initiate the 2FA setup process
+            showNotification(
+              "Two-factor authentication setup initiated. Check your email for instructions."
+            );
+          });
+      }
+
+      // Setup chat functionality
+      function setupChatFunctionality() {
+        const aiButton = document.getElementById("aiButton");
+        const chatContainer = document.getElementById("chatContainer");
+        const closeChat = document.getElementById("closeChat");
+        const chatInput = document.getElementById("chatInput");
+        const sendButton = document.getElementById("sendButton");
+        const chatMessages = document.getElementById("chatMessages");
+        const typingIndicator = document.getElementById("typingIndicator");
+
+        // Toggle chat window
+        aiButton.addEventListener("click", function () {
+          chatContainer.classList.toggle("active");
+        });
+
+        // Close chat window
+        closeChat.addEventListener("click", function () {
+          chatContainer.classList.remove("active");
+        });
+
+        // Send message function
+        function sendMessage() {
+          const message = chatInput.value.trim();
+
+          if (message !== "") {
+            // Add user message
+            const userMessageDiv = document.createElement("div");
+            userMessageDiv.classList.add("message", "user-message");
+            userMessageDiv.textContent = message;
+            chatMessages.appendChild(userMessageDiv);
+
+            // Clear input
+            chatInput.value = "";
+
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Show typing indicator
+            typingIndicator.style.display = "flex";
+            chatMessages.appendChild(typingIndicator);
+
+            // Simulate AI response after delay
+            setTimeout(function () {
+              // Hide typing indicator
+              typingIndicator.style.display = "none";
+
+              // Add bot response
+              const botResponse = getBotResponse(message);
+              const botMessageDiv = document.createElement("div");
+              botMessageDiv.classList.add("message", "bot-message");
+              botMessageDiv.textContent = botResponse;
+              chatMessages.appendChild(botMessageDiv);
+
+              // Scroll to bottom again
+              chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1500);
+          }
+        }
+
+        // Handle send button click
+        sendButton.addEventListener("click", sendMessage);
+
+        // Handle enter key
+        chatInput.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            sendMessage();
+          }
+        });
+
+        // Bot responses
+        function getBotResponse(message) {
+          message = message.toLowerCase();
+
+          if (message.includes("hello") || message.includes("hi")) {
+            return "Hello! How can I assist you with your health profile today?";
+          } else if (
+            message.includes("profile") ||
+            message.includes("account")
+          ) {
+            return "You can update your personal information in the Account Settings tab. Is there something specific you'd like to change?";
+          } else if (
+            message.includes("password") ||
+            message.includes("security")
+          ) {
+            return "To change your password, go to the Security tab in your profile. Make sure to choose a strong password!";
+          } else if (
+            message.includes("notification") ||
+            message.includes("alert")
+          ) {
+            return "You can manage your notification preferences in the Notifications tab. Would you like to know more?";
+          } else if (
+            message.includes("medical") ||
+            message.includes("health record")
+          ) {
+            return "Your medical records can be accessed from the Medical Records page. Would you like me to explain how to navigate through them?";
+          } else if (
+            message.includes("doctor") ||
+            message.includes("appointment")
+          ) {
+            return "You can book an appointment with a doctor through the Doctors page. I can help you find a specialist if you tell me what you need.";
+          } else if (message.includes("thank")) {
+            return "You're welcome! Is there anything else I can help you with?";
+          } else {
+            return "I'm here to help with your health profile. You can ask me about updating your information, security settings, or notification preferences.";
+          }
+        }
+      }
+
+      // Setup profile photo functionality
+      function setupProfilePhoto() {
+        document
+          .getElementById("profile-photo")
+          .addEventListener("click", function () {
+            // Create a file input element
+            const fileInput = document.createElement("input");
+            fileInput.type = "file";
+            fileInput.accept = "image/*";
+
+            // Handle file selection
+            fileInput.onchange = function (e) {
+              const file = e.target.files[0];
+              if (file) {
+                // In a real application, you would upload the file to a server
+                // For this demo, we'll use a FileReader to display the selected image
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                  document.getElementById("profileImage").src = e.target.result;
+                  showNotification("Profile photo updated successfully!");
+                };
+                reader.readAsDataURL(file);
+              }
+            };
+
+            // Trigger the file input click
+            fileInput.click();
+          });
+      }
+
+      // Sign Out Functionality
+      window.handleSignOut = function () {
+        if (confirm("Are you sure you want to sign out?")) {
+          // In a real application, you would destroy the session
+          window.location.href = "home.html";
+        }
+      };
+
+      // Show notification function
+      function showNotification(message, type = "success") {
+        const notification = document.createElement("div");
+        notification.style.position = "fixed";
+        notification.style.top = "20px";
+        notification.style.right = "20px";
+        notification.style.padding = "15px 20px";
+        notification.style.borderRadius = "5px";
+        notification.style.color = "white";
+        notification.style.zIndex = "9999";
+        notification.style.boxShadow = "0 3px 10px rgba(0, 0, 0, 0.2)";
+        notification.style.transition = "all 0.5s ease";
+        notification.style.opacity = "0";
+        notification.style.transform = "translateY(-20px)";
+
+        if (type === "success") {
+          notification.style.backgroundColor = "#2ecc71";
+        } else if (type === "error") {
+          notification.style.backgroundColor = "#e74c3c";
+        } else {
+          notification.style.backgroundColor = "#3498db";
+        }
+
+        notification.innerHTML = message;
+        document.body.appendChild(notification);
+
+        // Animate in
+        setTimeout(() => {
+          notification.style.opacity = "1";
+          notification.style.transform = "translateY(0)";
+        }, 10);
+
+        // Remove after 4 seconds
+        setTimeout(() => {
+          notification.style.opacity = "0";
+          notification.style.transform = "translateY(-20px)";
+          setTimeout(() => {
+            notification.remove();
+          }, 500);
+        }, 4000);
+      }
+    </script>
+  </body>
+</html>

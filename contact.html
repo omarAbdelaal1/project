@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us</title>
+    <style>
+      :root {
+        --main-color: #2563eb;
+        --second-color: #1d4ed8;
+        --third-color: #1e40af;
+        --transition-time: 0.4s;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: #f5f5f5;
+        color: #333;
+        /* line-height: 1.6; */
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .active {
+        border-bottom: 3px solid var(--main-color);
+        color: var(--main-color) !important;
+      }
+
+      /* Navigation */
+      nav {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 1rem 5%;
+        position: relative;
+        width: 100%;
+        top: 0;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        transition: all var(--transition-time) ease;
+      }
+
+      nav:hover {
+        background: rgba(255, 255, 255, 1);
+      }
+
+      .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .logo {
+        color: var(--main-color);
+        font-size: 1.7rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        text-decoration: none;
+        position: relative;
+      }
+
+      .logo::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 3px;
+        background-color: var(--main-color);
+        transition: width 0.4s ease;
+      }
+
+      .logo:hover {
+        transform: scale(1.05);
+      }
+
+      .logo:hover::after {
+        width: 100%;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #4b5563;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 5px 0;
+      }
+
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--main-color);
+        transition: width 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        color: var(--main-color);
+      }
+
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      .login-btn {
+        background: var(--main-color);
+        color: white;
+        padding: 0.6rem 1.8rem;
+        border-radius: 25px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .login-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: all 0.5s ease;
+      }
+
+      .login-btn:hover {
+        background: var(--second-color);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(29, 78, 216, 0.4);
+      }
+
+      .login-btn:hover::before {
+        left: 100%;
+      }
+
+      .login-btn:active {
+        transform: translateY(0);
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        right: 0;
+        border-radius: 4px;
+      }
+
+      .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+      }
+
+      .dropdown-content a:hover {
+        background-color: #f1f1f1;
+      }
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .modal-content {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        max-width: 500px;
+        width: 90%;
+      }
+
+      .modal-content h2 {
+        margin-bottom: 1rem;
+      }
+
+      .booking-form,
+      .login-form {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .close {
+        float: right;
+        cursor: pointer;
+        font-size: 1.5rem;
+      }
+
+      button {
+        background-color: #2980b9;
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #3498db;
+      }
+
+      .content {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 40px 0;
+      }
+
+      .contact-form {
+        flex: 1;
+        min-width: 300px;
+        background: #fff;
+        padding: 30px;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-right: 20px;
+      }
+
+      .contact-info {
+        flex: 1;
+        min-width: 300px;
+        background: #fff;
+        padding: 30px;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        margin-bottom: 20px;
+        color: #2c3e50;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .button-s {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background 0.3s;
+      }
+
+      .button-s:hover {
+        background: #2980b9;
+      }
+
+      .success-message {
+        display: none;
+        background: #d4edda;
+        color: #155724;
+        padding: 10px;
+        border-radius: 4px;
+        margin-top: 20px;
+      }
+
+      .info-item {
+        margin-bottom: 15px;
+      }
+
+      .info-item i {
+        margin-right: 10px;
+        color: #3498db;
+      }
+
+      .map {
+        margin-top: 20px;
+        height: 200px;
+        background: #eee;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #777;
+      }
+
+      footer {
+        text-align: center;
+        padding: 20px 0;
+        background: #2c3e50;
+        color: #fff;
+        margin-top: 40px;
+      }
+
+      /* AI Button Style */
+      .ai-button {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        background-color: #1a73e8;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+        transition: all 0.3s ease;
+      }
+
+      .ai-button:hover {
+        background-color: #1557b0;
+        transform: scale(1.05);
+      }
+
+      /* Chat Container Style */
+      .chat-container {
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        width: 350px;
+        height: 450px;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 998;
+        border: 1px solid #e0e0e0;
+      }
+
+      .chat-container span {
+        display: flex;
+        align-items: center;
+      }
+
+      .chat-header {
+        background-color: #1a73e8;
+        color: white;
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .chat-header h3 {
+        margin: 0;
+        font-size: 16px;
+      }
+
+      .close-chat {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+      }
+
+      .chat-messages {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        background-color: #f5f8ff;
+      }
+
+      .message {
+        margin-bottom: 15px;
+        max-width: 80%;
+        padding: 10px 15px;
+        border-radius: 15px;
+        line-height: 1.4;
+        font-size: 14px;
+      }
+
+      .bot-message {
+        background-color: #e3f2fd;
+        color: #333;
+        border-top-left-radius: 5px;
+        align-self: flex-start;
+      }
+
+      .user-message {
+        background-color: #1a73e8;
+        color: white;
+        margin-left: auto;
+        border-top-right-radius: 5px;
+      }
+
+      .chat-input-container {
+        display: flex;
+        padding: 10px;
+        border-top: 1px solid #e0e0e0;
+        background-color: white;
+      }
+
+      .chat-input {
+        flex: 1;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        outline: none;
+        font-size: 14px;
+      }
+
+      .send-button {
+        background-color: #1a73e8;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        margin-left: 10px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .send-button:hover {
+        background-color: #1557b0;
+      }
+
+      /* Show animation */
+      .chat-container.active {
+        display: flex;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Typing indicator */
+      .typing-indicator {
+        display: flex;
+        padding: 10px 15px;
+
+        background-color: #e3f2fd;
+        border-radius: 15px;
+        margin-bottom: 15px;
+        max-width: 80%;
+        border-top-left-radius: 5px;
+        align-self: flex-start;
+        display: none;
+      }
+
+      .typing-indicator span {
+        height: 8px;
+        width: 8px;
+        background-color: #1a73e8;
+        border-radius: 50%;
+        display: inline-block;
+        margin: 0 2px;
+        opacity: 0.7;
+      }
+
+      .typing-indicator span:nth-child(1) {
+        animation: blink 1s infinite 0.2s;
+      }
+
+      .typing-indicator span:nth-child(2) {
+        animation: blink 1s infinite 0.4s;
+      }
+
+      .typing-indicator span:nth-child(3) {
+        animation: blink 1s infinite 0.6s;
+      }
+
+      @keyframes blink {
+        0% {
+          opacity: 0.4;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0.4;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .content {
+          flex-direction: column;
+        }
+
+        .contact-form {
+          margin-right: 0;
+          margin-bottom: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav>
+      <div class="nav-container">
+        <div onclick="showHome()"><a href="home.html" class="logo">Curinai</a></div>
+        <div class="nav-links">
+          <a href="home.html" onclick="showHome()">Home</a>
+          <a href="doctors.html">Doctors</a>
+          <a href="medical.html">Medical Records</a>
+          <a href="shop.html">Medical Shop</a>
+          <a href="contact.html" class="active">Contact</a>
+          <button class="login-btn" onclick="openLoginModal()">Login</button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="content">
+        <div class="contact-form">
+          <h2>Send Us a Message</h2>
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" required />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <select id="subject" name="subject">
+                <option value="general">General Inquiry</option>
+                <option value="support">Technical Support</option>
+                <option value="billing">Billing Question</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" required></textarea>
+            </div>
+
+            <button type="submit" class="button-s">Send Message</button>
+
+            <div class="success-message" id="successMessage">
+              Your message has been sent successfully. We'll get back to you
+              soon!
+            </div>
+          </form>
+        </div>
+
+        <div class="contact-info">
+          <h2>Contact Information</h2>
+
+          <div class="info-item">
+            <i>📍</i> 123 Business Avenue, City, Country
+          </div>
+
+          <div class="info-item"><i>📞</i> +1 (555) 123-4567</div>
+
+          <div class="info-item"><i>✉️</i> contact@companyname.com</div>
+
+          <div class="info-item">
+            <i>🕒</i> Monday - Friday: 9:00 AM - 5:00 PM
+          </div>
+
+          <div class="map">
+            <p>Map will be displayed here</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="loginModal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('loginModal')">&times;</span>
+        <h2>Sign In</h2>
+        <form class="login-form" onsubmit="handleLogin(event)">
+          <input
+            type="email"
+            id="loginEmail"
+            placeholder="Email Address"
+            required
+          />
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="Password"
+            required
+          />
+          <button type="submit">Sign In</button>
+          <p style="text-align: center">
+            Don't have an account?
+            <a href="#" onclick="switchToRegister()">Register</a>
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal" id="registerModal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('registerModal')">&times;</span>
+        <h2>Create Account</h2>
+        <form class="login-form" onsubmit="handleRegister(event)">
+          <input
+            type="text"
+            id="registerName"
+            placeholder="Full Name"
+            required
+          />
+          <input
+            type="email"
+            id="registerEmail"
+            placeholder="Email Address"
+            required
+          />
+          <input
+            type="password"
+            id="registerPassword"
+            placeholder="Password"
+            required
+          />
+          <input type="password" placeholder="Confirm Password" required />
+          <button type="submit">Register</button>
+          <p style="text-align: center">
+            Already have an account?
+            <a href="#" onclick="switchToLogin()">Sign In</a>
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <!-- AI Chat Button -->
+    <div class="ai-button" id="aiButton">AI</div>
+
+    <!-- Chat Container -->
+    <div class="chat-container" id="chatContainer">
+      <div class="chat-header">
+        <h3>Curinai Health Assistant</h3>
+        <button class="close-chat" id="closeChat">×</button>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot-message">
+          Hello! I'm your Curinai Health Assistant. How can I help you today?
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="chat-input-container">
+        <input
+          type="text"
+          class="chat-input"
+          id="chatInput"
+          placeholder="Type your message here..."
+        />
+        <span>🎙️</span>
+        <button class="send-button" id="sendButton">→</button>
+      </div>
+    </div>
+    >
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 Company Name. All Rights Reserved.</p>
+      </div>
+    </footer>
+
+    <script>
+      document
+        .getElementById("contactForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          // Get form values
+          const name = document.getElementById("name").value;
+          const email = document.getElementById("email").value;
+          const subject = document.getElementById("subject").value;
+          const message = document.getElementById("message").value;
+
+          // Here you would typically send the data to a server
+          console.log("Form submitted with:", {
+            name,
+            email,
+            subject,
+            message,
+          });
+
+          // Show success message
+          document.getElementById("successMessage").style.display = "block";
+
+          // Reset form
+          document.getElementById("contactForm").reset();
+
+          // Hide success message after 5 seconds
+          setTimeout(function () {
+            document.getElementById("successMessage").style.display = "none";
+          }, 5000);
+        });
+
+      function openModal() {
+        document.getElementById("bookingModal").style.display = "flex";
+      }
+
+      function closeModal() {
+        document.getElementById("bookingModal").style.display = "none";
+      }
+
+      function openLoginModal() {
+        document.getElementById("loginModal").style.display = "flex";
+      }
+
+      function switchToRegister() {
+        closeModal("loginModal");
+        document.getElementById("registerModal").style.display = "flex";
+      }
+
+      function switchToLogin() {
+        closeModal("registerModal");
+        document.getElementById("loginModal").style.display = "flex";
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+      }
+
+      function handleBooking(event) {
+        event.preventDefault();
+        alert(
+          "Booking confirmed! We will send you a confirmation email shortly."
+        );
+        closeModal();
+      }
+
+      function handleLogin(event) {
+        event.preventDefault();
+        const email = document.getElementById("loginEmail").value;
+
+        // Extract name from email for demo purposes
+        const name = email.split("@")[0];
+
+        // Set current user
+        currentUser = {
+          name: name.charAt(0).toUpperCase() + name.slice(1), // Capitalize first letter
+          email: email,
+        };
+
+        // Update UI
+        updateUserSection();
+
+        // Close modal
+        closeModal("loginModal");
+
+        // Show success message
+        alert(`Welcome back, ${currentUser.name}!`);
+      }
+
+      function handleRegister(event) {
+        event.preventDefault();
+        const name = document.getElementById("registerName").value;
+        const email = document.getElementById("registerEmail").value;
+
+        // Set current user
+        currentUser = {
+          name: name,
+          email: email,
+        };
+
+        // Update UI
+        updateUserSection();
+
+        // Close modal
+        closeModal("registerModal");
+
+        // Show success message
+        alert(`Account created successfully. Welcome, ${currentUser.name}!`);
+      }
+
+      function updateUserSection() {
+        const userSection = document.getElementById("userSection");
+
+        if (currentUser) {
+          userSection.innerHTML = `
+                    <div class="dropdown">
+                        <span class="user-greeting">Hello, ${currentUser.name} ▼</span>
+                        <div class="dropdown-content">
+                            <a href="#">My Profile</a>
+                            <a href="medical.html">Medical Records</a>
+                            <a href="#" onclick="handleSignOut()">Sign Out</a>
+                        </div>
+                    </div>
+                `;
+        } else {
+          userSection.innerHTML = `
+                    <button id="signInButton" onclick="openLoginModal()">Sign In</button>
+                `;
+        }
+      }
+
+      function handleSignOut() {
+        currentUser = null;
+        updateUserSection();
+        alert("You have been signed out successfully.");
+      }
+    </script>
+    <script>
+      // JavaScript for chat functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        const aiButton = document.getElementById("aiButton");
+        const chatContainer = document.getElementById("chatContainer");
+        const closeChat = document.getElementById("closeChat");
+        const chatInput = document.getElementById("chatInput");
+        const sendButton = document.getElementById("sendButton");
+        const chatMessages = document.getElementById("chatMessages");
+        const typingIndicator = document.getElementById("typingIndicator");
+
+        // Toggle chat window
+        aiButton.addEventListener("click", function () {
+          chatContainer.classList.toggle("active");
+        });
+
+        // Close chat window
+        closeChat.addEventListener("click", function () {
+          chatContainer.classList.remove("active");
+        });
+
+        // Send message function
+        function sendMessage() {
+          const message = chatInput.value.trim();
+
+          if (message !== "") {
+            // Add user message
+            const userMessageDiv = document.createElement("div");
+            userMessageDiv.classList.add("message", "user-message");
+            userMessageDiv.textContent = message;
+            chatMessages.appendChild(userMessageDiv);
+
+            // Clear input
+            chatInput.value = "";
+
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Show typing indicator
+            typingIndicator.style.display = "flex";
+
+            // Simulate AI response after delay
+            setTimeout(function () {
+              // Hide typing indicator
+
+              typingIndicator.style.display = "none";
+
+              // Add bot response (here you would integrate with your actual AI)
+              const botResponse = getBotResponse(message);
+              const botMessageDiv = document.createElement("div");
+              botMessageDiv.classList.add("message", "bot-message");
+              botMessageDiv.textContent = botResponse;
+              chatMessages.appendChild(botMessageDiv);
+
+              // Scroll to bottom again
+              chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1500);
+          }
+        }
+
+        // Handle send button click
+        sendButton.addEventListener("click", sendMessage);
+
+        // Handle enter key
+        chatInput.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            sendMessage();
+          }
+        });
+
+        // Simple responses - in a real app, you would connect to an AI API
+        function getBotResponse(message) {
+          message = message.toLowerCase();
+
+          if (message.includes("hello") || message.includes("hi")) {
+            return "Hello! How can I assist you with your healthcare needs today?";
+          } else if (
+            message.includes("appointment") ||
+            message.includes("book")
+          ) {
+            return "You can schedule an appointment through our portal. Would you like me to help you with that?";
+          } else if (
+            message.includes("doctor") ||
+            message.includes("specialist")
+          ) {
+            return "We have many specialists available. What type of doctor are you looking for?";
+          } else if (
+            message.includes("medical record") ||
+            message.includes("history")
+          ) {
+            return "Your medical records are available in the Medical Records section. You need to be logged in to access them.";
+          } else if (
+            message.includes("prescription") ||
+            message.includes("medicine")
+          ) {
+            return "You can view and request prescription refills from your patient dashboard after logging in.";
+          } else if (message.includes("thank")) {
+            return "You're welcome! Is there anything else I can help you with?";
+          } else {
+            return "Thank you for your question. How else can I assist you with our healthcare services?";
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

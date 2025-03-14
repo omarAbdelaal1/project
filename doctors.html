@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Healthcare Portal</title>
+    <style>
+      :root {
+        --main-color: #2563eb;
+        --second-color: #1d4ed8;
+        --third-color: #1e40af;
+        --fourth-color: #2980b9;
+        --transition-time: 0.4s;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: #f5f5f5;
+      }
+
+      .active {
+        border-bottom: 3px solid var(--main-color);
+        color: var(--main-color) !important;
+      }
+
+      /* Navigation */
+      nav {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 1rem 5%;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        transition: all var(--transition-time) ease;
+      }
+
+      nav:hover {
+        background: rgba(255, 255, 255, 1);
+      }
+
+      .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .logo {
+        color: var(--main-color);
+        font-size: 1.7rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        position: relative;
+      }
+
+      .logo::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 3px;
+        background-color: var(--main-color);
+        transition: width 0.4s ease;
+      }
+
+      .logo:hover {
+        transform: scale(1.05);
+      }
+
+      .logo:hover::after {
+        width: 100%;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #4b5563;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 5px 0;
+      }
+
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--main-color);
+        transition: width 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        color: var(--main-color);
+      }
+
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      /* Dropdown Menu Styles */
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        border-radius: 5px;
+        margin-top: 5px;
+      }
+
+      .dropdown-content a {
+        color: #4b5563;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        transition: all 0.3s ease;
+      }
+
+      .dropdown-content a:hover {
+        background-color: #f1f1f1;
+        color: var(--main-color);
+      }
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+
+      .login-btn {
+        background: var(--main-color);
+        color: white;
+        padding: 0.6rem 1.8rem;
+        border-radius: 25px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .login-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: all 0.5s ease;
+      }
+
+      .login-btn:hover {
+        background: var(--second-color);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(29, 78, 216, 0.4);
+      }
+
+      .login-btn:hover::before {
+        left: 100%;
+      }
+
+      .login-btn:active {
+        transform: translateY(0);
+      }
+
+      header {
+        background: linear-gradient(
+          to right,
+          var(--main-color),
+          var(--second-color)
+        );
+        color: white;
+        padding: 2.5rem 5% 1rem;
+        text-align: center;
+        margin-top: 50px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      header h1 {
+        animation: fadeInDown 1s ease;
+      }
+
+      header p {
+        animation: fadeInUp 1s ease 0.3s both;
+      }
+
+      /* Added animations */
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideInRight {
+        from {
+          transform: translateX(50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .home-sections {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        animation: fadeIn 1s ease;
+      }
+
+      .section {
+        margin-bottom: 2rem;
+      }
+
+      .section h2 {
+        margin-bottom: 1rem;
+        color: #2c3e50;
+        position: relative;
+        animation: fadeInUp 0.8s ease;
+      }
+
+      .section h2::after {
+        content: "";
+        display: block;
+        width: 50px;
+        height: 3px;
+        background-color: #3498db;
+        margin-top: 8px;
+        animation: slideInRight 1s ease;
+      }
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .feature-card {
+        padding: 1.5rem;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        transition: all 0.4s ease;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.8s ease forwards;
+      }
+
+      .feature-card:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+
+      .feature-card:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .feature-card:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+
+      .feature-card:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .feature-card h3 {
+        color: #2980b9;
+        margin-bottom: 0.5rem;
+      }
+
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        right: 0;
+        border-radius: 4px;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+      }
+
+      .dropdown-content a:hover {
+        background-color: #f1f1f1;
+      }
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+
+      .user-greeting {
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 4px;
+        background-color: var(--main-color);
+        color: white;
+      }
+
+      .search-section {
+        background-color: #f5f6fa;
+        padding: 2rem;
+        text-align: center;
+        animation: fadeIn 1s ease;
+      }
+
+      .search-container {
+        max-width: 800px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      input,
+      select {
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        width: 100%;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--main-color);
+        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+      }
+
+      #signInButton,
+      button[type="submit"],
+      .search-btn {
+        background: var(--main-color);
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .search-btn {
+        position: absolute;
+        right: 46%;
+      }
+
+      #signInButton:hover,
+      button[type="submit"]:hover,
+      .search-btn:hover {
+        background: var(--second-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(29, 78, 216, 0.3);
+      }
+
+      #signInButton:active,
+      button[type="submit"]:active,
+      .search-btn:active {
+        transform: translateY(0);
+      }
+
+      .doctors-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .doctor-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.8s ease forwards;
+      }
+
+      .doctor-card:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+
+      .doctor-card:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .doctor-card:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+
+      .doctor-card:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+
+      .doctor-card:nth-child(5) {
+        animation-delay: 0.5s;
+      }
+
+      .doctor-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .doctor-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+
+      .doctor-info {
+        padding: 1rem;
+      }
+
+      .rating {
+        color: #f1c40f;
+        margin: 0.5rem 0;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .modal-content {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        max-width: 500px;
+        width: 90%;
+        transform: scale(0.7);
+        opacity: 0;
+        transition: all 0.3s ease;
+      }
+
+      .modal.active .modal-content {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      .modal-content h2 {
+        margin-bottom: 1rem;
+      }
+
+      .booking-form,
+      .login-form {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .close {
+        float: right;
+        cursor: pointer;
+        font-size: 1.5rem;
+      }
+
+      button {
+        background-color: #2980b9;
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #3498db;
+      }
+
+      .booking-form {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .close {
+        float: right;
+        cursor: pointer;
+        font-size: 1.5rem;
+      }
+
+      /* AI Button Style */
+      .ai-button {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        background-color: #1a73e8;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+        transition: all 0.3s ease;
+        animation: pulse 2s infinite;
+      }
+
+      .ai-button:hover {
+        background-color: #1557b0;
+        transform: scale(1.05);
+        animation: none;
+      }
+
+      /* Chat Container Style */
+      .chat-container {
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        width: 350px;
+        height: 450px;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 998;
+        border: 1px solid #e0e0e0;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      .chat-container.active {
+        display: flex;
+        animation: slideUpFadeIn 0.4s ease forwards;
+      }
+
+      @keyframes slideUpFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes messageIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .chat-container span {
+        display: flex;
+        align-items: center;
+      }
+
+      .chat-header {
+        background-color: #1a73e8;
+        color: white;
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .chat-header h3 {
+        margin: 0;
+        font-size: 16px;
+      }
+
+      .close-chat {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+      }
+
+      .chat-messages {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        background-color: #f5f8ff;
+      }
+
+      .message {
+        margin-bottom: 15px;
+        max-width: 80%;
+        padding: 10px 15px;
+        border-radius: 15px;
+        line-height: 1.4;
+        font-size: 14px;
+        animation: messageIn 0.3s ease;
+      }
+
+      .bot-message {
+        background-color: #e3f2fd;
+        color: #333;
+        border-top-left-radius: 5px;
+        align-self: flex-start;
+      }
+
+      .user-message {
+        background-color: #1a73e8;
+        color: white;
+        margin-left: auto;
+        border-top-right-radius: 5px;
+      }
+
+      .chat-input-container {
+        display: flex;
+        padding: 10px;
+        border-top: 1px solid #e0e0e0;
+        background-color: white;
+      }
+
+      .chat-input {
+        flex: 1;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        outline: none;
+        font-size: 14px;
+      }
+
+      .send-button {
+        background-color: #1a73e8;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        margin-left: 10px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .send-button:hover {
+        background-color: #1557b0;
+      }
+
+      /* Typing indicator */
+      .typing-indicator {
+        display: flex;
+        padding: 10px 15px;
+        background-color: #e3f2fd;
+        border-radius: 15px;
+        margin-bottom: 15px;
+        max-width: 80%;
+        border-top-left-radius: 5px;
+        align-self: flex-start;
+        display: none;
+      }
+
+      .typing-indicator span {
+        height: 8px;
+        width: 8px;
+        background-color: #1a73e8;
+        border-radius: 50%;
+        display: inline-block;
+        margin: 0 2px;
+        opacity: 0.7;
+      }
+
+      .typing-indicator span:nth-child(1) {
+        animation: blink 1s infinite 0.2s;
+      }
+
+      .typing-indicator span:nth-child(2) {
+        animation: blink 1s infinite 0.4s;
+      }
+
+      .typing-indicator span:nth-child(3) {
+        animation: blink 1s infinite 0.6s;
+      }
+
+      @keyframes blink {
+        0% {
+          opacity: 0.4;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0.4;
+        }
+      }
+
+      /* Success message animation */
+      .success-message {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #4caf50;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 4px;
+        z-index: 2000;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        animation: slideIn 0.5s ease, slideOut 0.5s ease 3.5s forwards;
+        max-width: 300px;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideOut {
+        from {
+          transform: translateX(0);
+          opacity: 1;
+        }
+        to {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+
+        .hero h1 {
+          font-size: 2rem;
+        }
+
+        .search-container {
+          grid-template-columns: 1fr;
+        }
+
+        .chat-container {
+          width: 90%;
+          right: 5%;
+          left: 5%;
+        }
+      }
+
+      footer {
+        background-color: var(--third-color);
+        color: white;
+        text-align: center;
+        padding: 1rem;
+        margin-top: 2rem;
+        animation: fadeIn 1s ease;
+      }
+
+      .logo {
+        color: var(--main-color);
+        font-size: 1.7rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        text-decoration: none;
+        position: relative;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav>
+      <div class="nav-container">
+        <div onclick="showHome()">
+          <a href="home.html" class="logo">Curinai</a>
+        </div>
+        <div class="nav-links">
+          <a href="home.html" id="home-link" onclick="showHome()">Home</a>
+          <a
+            href="doctors.html"
+            id="doctors-link"
+            onclick="showDoctors()"
+            class="active"
+            >Doctors</a
+          >
+          <a href="medical.html" id="medical-records-link">Medical Records</a>
+          <a href="#" id="medical-shop-link" onclick="showMedicalShop()"
+            >Medical Shop</a
+          >
+          <a href="contact.html" id="contact-link" onclick="showContact()"
+            >Contact</a
+          >
+          <div id="userSection">
+            <button class="login-btn" onclick="openLoginModal()">Login</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <header>
+      <h1>Curinai</h1>
+      <p>Find and Book the Best Doctors</p>
+    </header>
+
+    <div class="home-sections" id="homeContent">
+      <section class="section">
+        <h2>Why Choose Us</h2>
+        <div class="features">
+          <div class="feature-card">
+            <h3>Qualified Doctors</h3>
+            <p>
+              All our doctors are certified specialists with years of experience
+              in their fields.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>Easy Booking</h3>
+            <p>
+              Book appointments with just a few clicks, anytime and anywhere.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>Patient Reviews</h3>
+            <p>
+              Read genuine reviews from other patients to help you make informed
+              decisions.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>24/7 Support</h3>
+            <p>
+              Our customer support team is available round the clock to assist
+              you.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Find Your Doctor</h2>
+        <div class="search-container">
+          <input
+            type="text"
+            id="nameSearch"
+            placeholder="Search by doctor's name"
+          />
+          <input
+            type="text"
+            id="locationSearch"
+            placeholder="Search by location"
+          />
+          <select id="specializationSearch">
+            <option value="">Select Specialization</option>
+            <option value="Cardiologist">Cardiologist</option>
+            <option value="Dermatologist">Dermatologist</option>
+            <option value="Pediatrician">Pediatrician</option>
+            <option value="Neurologist">Neurologist</option>
+            <option value="Orthopedic">Orthopedic</option>
+          </select>
+        </div>
+        <button class="search-btn" onclick="searchDoctors()">
+          Search Doctors
+        </button>
+      </section>
+
+      <div class="doctors-grid" id="doctorsGrid"></div>
+    </div>
+
+    <div id="otherContent" style="display: none">
+      <div class="home-sections">
+        <h2>Content Under Development</h2>
+        <p>
+          This section is currently being developed. Please check back later.
+        </p>
+      </div>
+    </div>
+
+    <div class="modal" id="bookingModal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('bookingModal')">&times;</span>
+        <h2>Book Appointment</h2>
+        <form class="booking-form" onsubmit="handleBooking(event)">
+          <input
+            type="text"
+            placeholder="Your Name"
+            id="bookingName"
+            required
+          />
+          <input
+            type="email"
+            placeholder="Your Email"
+            id="bookingEmail"
+            required
+          />
+          <input
+            type="tel"
+            placeholder="Your Phone"
+            id="bookingPhone"
+            required
+          />
+          <input type="date" id="bookingDate" required />
+          <select id="bookingTime" required>
+            <option value="">Select Time</option>
+            <option value="09:00">09:00 AM</option>
+            <option value="10:00">10:00 AM</option>
+            <option value="11:00">11:00 AM</option>
+            <option value="14:00">02:00 PM</option>
+            <option value="15:00">03:00 PM</option>
+            <option value="16:00">04:00 PM</option>
+          </select>
+          <textarea
+            placeholder="Additional Notes"
+            id="bookingNotes"
+            rows="3"
+          ></textarea>
+          <button type="submit">Confirm Booking</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal" id="loginModal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('loginModal')">&times;</span>
+        <h2>Sign In</h2>
+        <form class="login-form" onsubmit="handleLogin(event)">
+          <input
+            type="email"
+            id="loginEmail"
+            placeholder="Email Address"
+            required
+          />
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="Password"
+            required
+          />
+          <button type="submit">Sign In</button>
+          <p style="text-align: center">
+            Don't have an account?
+            <a href="#" onclick="switchToRegister()">Register</a>
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal" id="registerModal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('registerModal')">&times;</span>
+        <h2>Create Account</h2>
+        <form class="login-form" onsubmit="handleRegister(event)">
+          <input
+            type="text"
+            id="registerName"
+            placeholder="Full Name"
+            required
+          />
+          <input
+            type="email"
+            id="registerEmail"
+            placeholder="Email Address"
+            required
+          />
+          <input
+            type="password"
+            id="registerPassword"
+            placeholder="Password"
+            required
+          />
+          <input
+            type="password"
+            id="confirmPassword"
+            placeholder="Confirm Password"
+            required
+          />
+          <button type="submit">Register</button>
+          <p style="text-align: center">
+            Already have an account?
+            <a href="#" onclick="switchToLogin()">Sign In</a>
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <!-- AI Chat Button -->
+    <div class="ai-button" id="aiButton">AI</div>
+
+    <!-- Chat Container -->
+    <div class="chat-container" id="chatContainer">
+      <div class="chat-header">
+        <h3>Curinai Health Assistant</h3>
+        <button class="close-chat" id="closeChat">×</button>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot-message">
+          Hello! I'm your Curinai Health Assistant. How can I help you today?
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="chat-input-container">
+        <input
+          type="text"
+          class="chat-input"
+          id="chatInput"
+          placeholder="Type your message here..."
+        />
+        <button class="send-button" id="sendButton">→</button>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2025 Curinai. All rights reserved.</p>
+    </footer>
+
+    <script>
+      // Global variables
+      let currentUser = null;
+      let selectedDoctor = null;
+
+      const doctors = [
+        {
+          id: 1,
+          name: "Dr. Sarah Johnson",
+          specialization: "Cardiologist",
+          location: "New York",
+          rating: 4.8,
+          experience: "15 years",
+          image: "/d2/template_1/m.jpg",
+        },
+        {
+          id: 2,
+          name: "Dr. Michael Chen",
+          specialization: "Dermatologist",
+          location: "Los Angeles",
+          rating: 4.9,
+          experience: "12 years",
+          image: "/d2/template_1/m.jpg",
+        },
+        {
+          id: 3,
+          name: "Dr. Emily Williams",
+          specialization: "Pediatrician",
+          location: "Chicago",
+          rating: 4.7,
+          experience: "10 years",
+          image: "/d2/template_1/m.jpg",
+        },
+        {
+          id: 4,
+          name: "Dr. James Wilson",
+          specialization: "Neurologist",
+          location: "Boston",
+          rating: 4.9,
+          experience: "20 years",
+          image: "/d2/template_1/m.jpg",
+        },
+        {
+          id: 5,
+          name: "Dr. Lisa Thompson",
+          specialization: "Orthopedic",
+          location: "Miami",
+          rating: 4.6,
+          experience: "8 years",
+          image: "/d2/template_1/m.jpg",
+        },
+      ];
+
+      // Navigation functions
+      function showHome() {
+        document.getElementById("homeContent").style.display = "block";
+        document.getElementById("otherContent").style.display = "none";
+        updateActiveNavLink("Home");
+      }
+
+      function showDoctors() {
+        document.getElementById("homeContent").style.display = "block";
+        document.getElementById("otherContent").style.display = "none";
+        updateActiveNavLink("Doctors");
+        displayDoctors(doctors);
+      }
+
+      function showMedicalRecords() {
+        updateActiveNavLink("medical-records-link");
+        window.location.href = "medical.html";
+      }
+
+      function showPrescriptions() {
+        // This is a placeholder function that can be implemented later
+        updateActiveNavLink("medical-records-link");
+        alert("Prescriptions feature coming soon!");
+      }
+
+      function showLabTests() {
+        // This is a placeholder function that can be implemented later
+        updateActiveNavLink("medical-records-link");
+        alert("Lab Tests feature coming soon!");
+      }
+
+      function showMedicalShop() {
+        document.getElementById("homeContent").style.display = "none";
+        document.getElementById("otherContent").style.display = "block";
+        updateActiveNavLink("Medical Shop");
+      }
+
+      function showFeatures() {
+        document.getElementById("homeContent").style.display = "block";
+        document.getElementById("otherContent").style.display = "none";
+        updateActiveNavLink("Features");
+        // Scroll to features section
+        document
+          .querySelector(".features")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+
+      function showContact() {
+        document.getElementById("homeContent").style.display = "none";
+        document.getElementById("otherContent").style.display = "block";
+        updateActiveNavLink("Contact");
+      }
+
+      function updateActiveNavLink(page) {
+        const links = document.querySelectorAll(".nav-links a");
+        links.forEach((link) => {
+          if (link.textContent === page) {
+            link.classList.add("active");
+          } else {
+            link.classList.remove("active");
+          }
+        });
+      }
+
+      function displayDoctors(doctorsToShow) {
+        const grid = document.getElementById("doctorsGrid");
+        grid.innerHTML = "";
+
+        if (doctorsToShow.length === 0) {
+          grid.innerHTML =
+            "<p style='text-align: center; grid-column: 1/-1;'>No doctors found matching your criteria. Please try a different search.</p>";
+          return;
+        }
+
+        doctorsToShow.forEach((doctor) => {
+          const card = document.createElement("div");
+          card.className = "doctor-card";
+          card.innerHTML = `
+            <img src="${doctor.image}" alt="${doctor.name}" class="doctor-image">
+            <div class="doctor-info">
+              <h3>${doctor.name}</h3>
+              <p>${doctor.specialization}</p>
+              <p>${doctor.location}</p>
+              <div class="rating">★ ${doctor.rating}</div>
+              <p>Experience: ${doctor.experience}</p>
+              <button onclick="openBookingModal(${doctor.id})">Book Appointment</button>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      }
+
+      function searchDoctors() {
+        const nameQuery = document
+          .getElementById("nameSearch")
+          .value.toLowerCase();
+        const locationQuery = document
+          .getElementById("locationSearch")
+          .value.toLowerCase();
+        const specializationQuery = document.getElementById(
+          "specializationSearch"
+        ).value;
+
+        const filteredDoctors = doctors.filter((doctor) => {
+          const nameMatch = doctor.name.toLowerCase().includes(nameQuery);
+          const locationMatch = doctor.location
+            .toLowerCase()
+            .includes(locationQuery);
+          const specializationMatch =
+            !specializationQuery ||
+            doctor.specialization === specializationQuery;
+          return nameMatch && locationMatch && specializationMatch;
+        });
+
+        displayDoctors(filteredDoctors);
+      }
+
+      function openBookingModal(doctorId) {
+        if (!currentUser) {
+          // If user is not logged in, show login modal first
+          showNotification("Please log in to book an appointment");
+          openLoginModal();
+          return;
+        }
+
+        selectedDoctor = doctors.find((doctor) => doctor.id === doctorId);
+        document.getElementById("bookingModal").style.display = "flex";
+        document.getElementById("bookingModal").classList.add("active");
+      }
+
+      function openLoginModal() {
+        document.getElementById("loginModal").style.display = "flex";
+        document.getElementById("loginModal").classList.add("active");
+      }
+
+      function switchToRegister() {
+        closeModal("loginModal");
+        document.getElementById("registerModal").style.display = "flex";
+        document.getElementById("registerModal").classList.add("active");
+      }
+
+      function switchToLogin() {
+        closeModal("registerModal");
+        document.getElementById("loginModal").style.display = "flex";
+        document.getElementById("loginModal").classList.add("active");
+      }
+
+      function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.remove("active");
+
+        // Use setTimeout to allow animation to complete before hiding
+        setTimeout(() => {
+          modal.style.display = "none";
+        }, 300);
+      }
+
+      function handleBooking(event) {
+        event.preventDefault();
+
+        const bookingName = document.getElementById("bookingName").value;
+        const bookingDate = document.getElementById("bookingDate").value;
+        const bookingTime = document.getElementById("bookingTime").value;
+
+        // Format date for display
+        const date = new Date(bookingDate);
+        const formattedDate = date.toLocaleDateString("en-US", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+
+        // Create confirmation message
+        const message = `Booking confirmed for ${bookingName} with ${selectedDoctor.name} on ${formattedDate} at ${bookingTime}.`;
+
+        closeModal("bookingModal");
+        showNotification(message);
+
+        // Reset form
+        document.querySelector(".booking-form").reset();
+      }
+
+      function handleLogin(event) {
+        event.preventDefault();
+        const email = document.getElementById("loginEmail").value;
+
+        // Extract name from email for demo purposes
+        const name = email.split("@")[0];
+
+        // Set current user
+        currentUser = {
+          name: name.charAt(0).toUpperCase() + name.slice(1), // Capitalize first letter
+          email: email,
+        };
+
+        // Update UI
+        updateUserSection();
+
+        // Close modal
+        closeModal("loginModal");
+
+        // Show success message
+        showNotification(`Welcome back, ${currentUser.name}!`);
+
+        // Enable all medical record options after login
+        document.querySelectorAll(".dropdown-content a").forEach((item) => {
+          item.classList.remove("disabled");
+        });
+      }
+
+      function handleRegister(event) {
+        event.preventDefault();
+        const name = document.getElementById("registerName").value;
+        const email = document.getElementById("registerEmail").value;
+        const password = document.getElementById("registerPassword").value;
+        const confirmPassword =
+          document.getElementById("confirmPassword").value;
+
+        // Simple validation
+        if (password !== confirmPassword) {
+          showNotification("Passwords do not match!", "error");
+          return;
+        }
+
+        // Set current user
+        currentUser = {
+          name: name,
+          email: email,
+        };
+
+        // Update UI
+        updateUserSection();
+
+        // Close modal
+        closeModal("registerModal");
+
+        // Show success message
+        showNotification(
+          `Account created successfully. Welcome, ${currentUser.name}!`
+        );
+      }
+
+      function updateUserSection() {
+        const userSection = document.getElementById("userSection");
+
+        if (currentUser) {
+          userSection.innerHTML = `
+            <div class="dropdown">
+              <span class="user-greeting">${currentUser.name} ▼</span>
+              <div class="dropdown-content">
+                <a href="profile.html" onclick="showProfile()">My Profile</a>
+                <a href="#" onclick="showMedicalRecords()">Medical Records</a>
+                <a href="#" onclick="handleSignOut()">Sign Out</a>
+              </div>
+            </div>
+          `;
+        } else {
+          userSection.innerHTML = `
+            <button class="login-btn" onclick="openLoginModal()">Login</button>
+          `;
+        }
+      }
+
+      function handleSignOut() {
+        currentUser = null;
+        updateUserSection();
+        showNotification("You have been signed out successfully.");
+        showHome();
+      }
+
+      function showNotification(message, type = "success") {
+        // Create notification element
+        const notification = document.createElement("div");
+        notification.className = "success-message";
+        notification.textContent = message;
+
+        if (type === "error") {
+          notification.style.backgroundColor = "#f44336";
+        }
+
+        // Add to DOM
+        document.body.appendChild(notification);
+
+        // Remove after animation completes
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 4000);
+      }
+
+      // JavaScript for chat functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        const aiButton = document.getElementById("aiButton");
+        const chatContainer = document.getElementById("chatContainer");
+        const closeChat = document.getElementById("closeChat");
+        const chatInput = document.getElementById("chatInput");
+        const sendButton = document.getElementById("sendButton");
+        const chatMessages = document.getElementById("chatMessages");
+        const typingIndicator = document.getElementById("typingIndicator");
+
+        // Toggle chat window
+        aiButton.addEventListener("click", function () {
+          chatContainer.classList.toggle("active");
+
+          // If opening the chat, focus the input
+          if (chatContainer.classList.contains("active")) {
+            setTimeout(() => chatInput.focus(), 300);
+          }
+        });
+
+        // Close chat window
+        closeChat.addEventListener("click", function () {
+          chatContainer.classList.remove("active");
+        });
+
+        // Send message function
+        function sendMessage() {
+          const message = chatInput.value.trim();
+
+          if (message !== "") {
+            // Add user message
+            const userMessageDiv = document.createElement("div");
+            userMessageDiv.classList.add("message", "user-message");
+            userMessageDiv.textContent = message;
+            chatMessages.appendChild(userMessageDiv);
+
+            // Clear input
+            chatInput.value = "";
+
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Show typing indicator
+            typingIndicator.style.display = "flex";
+
+            // Simulate AI response after delay
+            setTimeout(function () {
+              // Hide typing indicator
+              typingIndicator.style.display = "none";
+
+              // Add bot response (here you would integrate with your actual AI)
+              const botResponse = getBotResponse(message);
+              const botMessageDiv = document.createElement("div");
+              botMessageDiv.classList.add("message", "bot-message");
+              botMessageDiv.textContent = botResponse;
+              chatMessages.appendChild(botMessageDiv);
+
+              // Scroll to bottom again
+              chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1500);
+          }
+        }
+
+        // Handle send button click
+        sendButton.addEventListener("click", sendMessage);
+
+        // Handle enter key
+        chatInput.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            sendMessage();
+          }
+        });
+
+        // Simple responses
+        function getBotResponse(message) {
+          message = message.toLowerCase();
+
+          if (message.includes("hello") || message.includes("hi")) {
+            return "Hello! How can I assist you with your healthcare needs today?";
+          } else if (
+            message.includes("appointment") ||
+            message.includes("book")
+          ) {
+            return "You can schedule an appointment by selecting a doctor and clicking the 'Book Appointment' button. Is there a specific specialist you're looking for?";
+          } else if (
+            message.includes("doctor") ||
+            message.includes("specialist")
+          ) {
+            return "We have many specialists available including Cardiologists, Dermatologists, Pediatricians, Neurologists, and Orthopedic doctors. You can use the search feature to find the right doctor for your needs.";
+          } else if (
+            message.includes("medical record") ||
+            message.includes("history")
+          ) {
+            return "Your medical records are available in the Medical Records section. You need to be logged in to access them.";
+          } else if (
+            message.includes("prescription") ||
+            message.includes("medicine")
+          ) {
+            return "You can view and request prescription refills from your patient dashboard after logging in. Our Medical Shop section also offers delivery of prescribed medications.";
+          } else if (message.includes("thank")) {
+            return "You're welcome! Is there anything else I can help you with today?";
+          } else if (
+            message.includes("location") ||
+            message.includes("address")
+          ) {
+            return "Our doctors are available in various locations including New York, Los Angeles, Chicago, Boston, and Miami. You can filter doctors by location in the search section.";
+          } else if (
+            message.includes("cost") ||
+            message.includes("price") ||
+            message.includes("fee")
+          ) {
+            return "Consultation fees vary by specialist. Most insurance plans are accepted. You can see specific pricing information when booking an appointment.";
+          } else if (message.includes("emergency")) {
+            return "If you're experiencing a medical emergency, please call 911 immediately or go to your nearest emergency room. Our platform is not designed for emergency situations.";
+          } else {
+            return "Thank you for your question. How else can I assist you with our healthcare services? You can ask about doctors, appointments, medical records, or our other services.";
+          }
+        }
+      });
+
+      // Initial display of all doctors on load
+      document.addEventListener("DOMContentLoaded", function () {
+        displayDoctors(doctors);
+
+        // Add event listeners for form inputs
+        document
+          .getElementById("nameSearch")
+          .addEventListener("input", debounce(searchDoctors, 500));
+        document
+          .getElementById("locationSearch")
+          .addEventListener("input", debounce(searchDoctors, 500));
+        document
+          .getElementById("specializationSearch")
+          .addEventListener("change", searchDoctors);
+
+        // Initialize mobile menu for responsive design
+        setupMobileMenu();
+      });
+
+      // Debounce function to limit how often a function can be called
+      function debounce(func, delay) {
+        let timeout;
+        return function () {
+          const context = this;
+          const args = arguments;
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(context, args), delay);
+        };
+      }
+
+      // Setup mobile menu for responsive design
+      function setupMobileMenu() {
+        const navContainer = document.querySelector(".nav-container");
+
+        // Create mobile menu button
+        const mobileMenuBtn = document.createElement("div");
+        mobileMenuBtn.className = "mobile-menu-btn";
+        mobileMenuBtn.innerHTML = "☰";
+        mobileMenuBtn.style.display = "none";
+        mobileMenuBtn.style.fontSize = "1.5rem";
+        mobileMenuBtn.style.cursor = "pointer";
+
+        navContainer.appendChild(mobileMenuBtn);
+
+        // Toggle mobile menu
+        mobileMenuBtn.addEventListener("click", function () {
+          const navLinks = document.querySelector(".nav-links");
+          navLinks.classList.toggle("mobile-active");
+        });
+
+        // Media query for responsive design
+        function handleMobileLayout() {
+          const navLinks = document.querySelector(".nav-links");
+
+          if (window.innerWidth <= 768) {
+            mobileMenuBtn.style.display = "block";
+            navLinks.style.display = "none";
+
+            // Add mobile styles if not already added
+            if (!navLinks.classList.contains("mobile-ready")) {
+              navLinks.classList.add("mobile-ready");
+              navLinks.style.position = "absolute";
+              navLinks.style.top = "60px";
+              navLinks.style.left = "0";
+              navLinks.style.width = "100%";
+              navLinks.style.flexDirection = "column";
+              navLinks.style.backgroundColor = "#fff";
+              navLinks.style.padding = "1rem";
+              navLinks.style.boxShadow = "0 5px 15px rgba(0,0,0,0.1)";
+              navLinks.style.gap = "1rem";
+            }
+          } else {
+            mobileMenuBtn.style.display = "none";
+            navLinks.style.display = "flex";
+
+            // Reset mobile styles
+            navLinks.classList.remove("mobile-active");
+          }
+        }
+
+        // Initialize mobile layout
+        handleMobileLayout();
+
+        // Update on window resize
+        window.addEventListener("resize", handleMobileLayout);
+
+        // Toggle mobile menu display
+        document
+          .querySelector(".mobile-menu-btn")
+          .addEventListener("click", function () {
+            const navLinks = document.querySelector(".nav-links");
+            navLinks.style.display =
+              navLinks.style.display === "flex" ? "none" : "flex";
+          });
+      }
+
+      // Add CSS rule for mobile menu active state
+      document.head.insertAdjacentHTML(
+        "beforeend",
+        `
+        <style>
+          .mobile-active {
+            display: flex !important;
+            animation: slideDown 0.3s ease forwards;
+          }
+          
+          @keyframes slideDown {
+            from {
+              opacity: 0;
+              transform: translateY(-10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          
+          @media (max-width: 768px) {
+            .nav-links {
+              gap: 0.5rem !important;
+            }
+            
+            .nav-links a {
+              width: 100%;
+              padding: 0.5rem 0;
+              border-bottom: 1px solid #eee;
+            }
+            
+            #userSection {
+              margin-top: 0.5rem;
+              width: 100%;
+              display: flex;
+              justify-content: center;
+            }
+          }
+        </style>
+      `
+      );
+
+      // Add preloading logic for performance
+      window.addEventListener("load", function () {
+        // Preload doctor images
+        doctors.forEach((doctor) => {
+          const img = new Image();
+          img.src = doctor.image;
+        });
+
+        // Add page transitions
+        const body = document.body;
+        body.classList.add("loaded");
+
+        // Add CSS for page transition
+        document.head.insertAdjacentHTML(
+          "beforeend",
+          `
+          <style>
+            body {
+              opacity: 0;
+              transition: opacity 0.5s ease;
+            }
+            
+            body.loaded {
+              opacity: 1;
+            }
+          </style>
+        `
+        );
+      });
+    </script>
+  </body>
+</html>

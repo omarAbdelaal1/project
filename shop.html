@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HealthPlus Digital Pharmacy</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      :root {
+        --primary-color: #2e86de;
+        --secondary-color: #54a0ff;
+        --accent-color: #10ac84;
+        --light-color: #f5f6fa;
+        --dark-color: #2f3542;
+        --success-color: #2ed573;
+        --warning-color: #ff7f50;
+        --error-color: #ff4757;
+        --main-color: #2563eb;
+        --second-color: #1d4ed8;
+        --third-color: #1e40af;
+      }
+
+      body {
+        background-color: var(--light-color);
+        color: var(--dark-color);
+        /* line-height: 1.6; */
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Header Styles */
+      header {
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+      }
+
+      .logo h1 {
+        font-size: 1.8rem;
+        color: var(--primary-color);
+        margin-left: 10px;
+      }
+
+      .logo-icon {
+        font-size: 2rem;
+        color: var(--primary-color);
+      }
+
+      .search-bar {
+        flex-grow: 1;
+        margin: 0 30px;
+        position: relative;
+      }
+
+      .search-bar input {
+        width: 100%;
+        padding: 10px 40px 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 50px;
+        font-size: 16px;
+      }
+
+      .search-bar button {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: var(--primary-color);
+      }
+
+      .user-actions {
+        display: flex;
+        align-items: center;
+      }
+
+      .user-actions a {
+        margin-left: 15px;
+        color: var(--dark-color);
+        text-decoration: none;
+        font-size: 1.5rem;
+        position: relative;
+      }
+
+      .cart-count {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background-color: var(--accent-color);
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+      }
+
+      .active {
+        border-bottom: 3px solid var(--main-color);
+        color: var(--main-color) !important;
+      }
+
+      /* Navigation */
+      nav {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 1rem 5%;
+        position: relative;
+        width: 100%;
+        top: 0;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        transition: all var(--transition-time) ease;
+      }
+
+      nav:hover {
+        background: rgba(255, 255, 255, 1);
+      }
+
+      .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .logo {
+        color: var(--main-color);
+        font-size: 1.7rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        text-decoration: none;
+        position: relative;
+      }
+
+      .logo::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 3px;
+        background-color: var(--main-color);
+        transition: width 0.4s ease;
+      }
+
+      .logo:hover {
+        transform: scale(1.05);
+      }
+
+      .logo:hover::after {
+        width: 100%;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #4b5563;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 5px 0;
+      }
+
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--main-color);
+        transition: width 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        color: var(--main-color);
+      }
+
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      .login-btn {
+        background: var(--main-color);
+        color: white;
+        padding: 0.6rem 1.8rem;
+        border-radius: 25px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .login-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: all 0.5s ease;
+      }
+
+      .login-btn:hover {
+        background: var(--second-color);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(29, 78, 216, 0.4);
+      }
+
+      .login-btn:hover::before {
+        left: 100%;
+      }
+
+      .login-btn:active {
+        transform: translateY(0);
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        right: 0;
+        border-radius: 4px;
+      }
+
+      .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+      }
+
+      .dropdown-content a:hover {
+        background-color: #f1f1f1;
+      }
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .modal-content {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        max-width: 500px;
+        width: 90%;
+      }
+
+      .modal-content h2 {
+        margin-bottom: 1rem;
+      }
+
+      .booking-form,
+      .login-form {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .close {
+        float: right;
+        cursor: pointer;
+        font-size: 1.5rem;
+      }
+
+      button {
+        background-color: #2980b9;
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #3498db;
+      }
+
+      .content {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 40px 0;
+      }
+
+      /* AI Button Style */
+      .ai-button {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        background-color: #1a73e8;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+        transition: all 0.3s ease;
+      }
+
+      .ai-button:hover {
+        background-color: #1557b0;
+        transform: scale(1.05);
+      }
+
+      /* Chat Container Style */
+      .chat-container {
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        width: 350px;
+        height: 450px;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 998;
+        border: 1px solid #e0e0e0;
+      }
+
+      .chat-container span {
+        display: flex;
+        align-items: center;
+      }
+
+      .chat-header {
+        background-color: #1a73e8;
+        color: white;
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .chat-header h3 {
+        margin: 0;
+        font-size: 16px;
+      }
+
+      .close-chat {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+      }
+
+      .chat-messages {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        background-color: #f5f8ff;
+      }
+
+      .message {
+        margin-bottom: 15px;
+        max-width: 80%;
+        padding: 10px 15px;
+        border-radius: 15px;
+        line-height: 1.4;
+        font-size: 14px;
+      }
+
+      .bot-message {
+        background-color: #e3f2fd;
+        color: #333;
+        border-top-left-radius: 5px;
+        align-self: flex-start;
+      }
+
+      .user-message {
+        background-color: #1a73e8;
+        color: white;
+        margin-left: auto;
+        border-top-right-radius: 5px;
+      }
+
+      .chat-input-container {
+        display: flex;
+        padding: 10px;
+        border-top: 1px solid #e0e0e0;
+        background-color: white;
+      }
+
+      .chat-input {
+        flex: 1;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        outline: none;
+        font-size: 14px;
+      }
+
+      .send-button {
+        background-color: #1a73e8;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        margin-left: 10px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .send-button:hover {
+        background-color: #1557b0;
+      }
+
+      /* Show animation */
+      .chat-container.active {
+        display: flex;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Typing indicator */
+      .typing-indicator {
+        display: flex;
+        padding: 10px 15px;
+
+        background-color: #e3f2fd;
+        border-radius: 15px;
+        margin-bottom: 15px;
+        max-width: 80%;
+        border-top-left-radius: 5px;
+        align-self: flex-start;
+        display: none;
+      }
+
+      .typing-indicator span {
+        height: 8px;
+        width: 8px;
+        background-color: #1a73e8;
+        border-radius: 50%;
+        display: inline-block;
+        margin: 0 2px;
+        opacity: 0.7;
+      }
+
+      .typing-indicator span:nth-child(1) {
+        animation: blink 1s infinite 0.2s;
+      }
+
+      .typing-indicator span:nth-child(2) {
+        animation: blink 1s infinite 0.4s;
+      }
+
+      .typing-indicator span:nth-child(3) {
+        animation: blink 1s infinite 0.6s;
+      }
+
+      @keyframes blink {
+        0% {
+          opacity: 0.4;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0.4;
+        }
+      }
+
+      /* Hero Section */
+      .hero {
+        background-image: linear-gradient(
+            rgba(46, 134, 222, 0.8),
+            rgba(46, 134, 222, 0.8)
+          ),
+          url("/api/placeholder/1200/400");
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 60px 0;
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .hero h2 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+        max-width: 700px;
+        margin: 0 auto 30px;
+      }
+
+      .btn {
+        display: inline-block;
+        background-color: var(--accent-color);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s, transform 0.3s;
+      }
+
+      .btn:hover {
+        background-color: #0c9270;
+        transform: translateY(-2px);
+      }
+
+      /* Services Section */
+      .section-title {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 40px;
+        color: var(--primary-color);
+      }
+
+      .services {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 60px;
+      }
+
+      .service-card {
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .service-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .service-image {
+        height: 200px;
+        background-color: #f1f2f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: var(--primary-color);
+      }
+
+      .service-content {
+        padding: 20px;
+      }
+
+      .service-content h3 {
+        margin-bottom: 10px;
+        color: var(--primary-color);
+      }
+
+      /* Products Section */
+      .products {
+        margin-bottom: 60px;
+      }
+
+      .products-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .category-tabs {
+        display: flex;
+        margin-bottom: 20px;
+        background-color: white;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+
+      .category-tab {
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .category-tab.active {
+        background-color: var(--primary-color);
+        color: white !important;
+      }
+
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 25px;
+      }
+
+      .product-card {
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+        position: relative;
+      }
+
+      .product-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .product-image {
+        height: 200px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f1f2f6;
+        font-size: 2.5rem;
+        color: var(--primary-color);
+      }
+
+      .product-content {
+        padding: 15px;
+      }
+
+      .product-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: var(--dark-color);
+      }
+
+      .product-category {
+        font-size: 0.85rem;
+        color: #777;
+        margin-bottom: 10px;
+      }
+
+      .product-price {
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+      }
+
+      .product-actions {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .add-to-cart {
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-weight: bold;
+      }
+
+      .add-to-cart:hover {
+        background-color: #0c9270;
+      }
+
+      .wishlist-btn {
+        border: none;
+        background: transparent;
+        color: #777;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: color 0.3s;
+      }
+
+      .wishlist-btn:hover {
+        color: var(--error-color);
+      }
+
+      .product-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: var(--primary-color);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 3px;
+        font-size: 0.8rem;
+        font-weight: bold;
+      }
+
+      .badge-prescription {
+        background-color: var(--warning-color);
+      }
+
+      /* Footer */
+      footer {
+        background-color: var(--dark-color);
+        color: white;
+        padding: 0px 0 20px;
+      }
+
+      .footer-bottom {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      /* Prescription Upload Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .modal-content {
+        background-color: white;
+        margin: 10% auto;
+        padding: 30px;
+        width: 90%;
+        max-width: 600px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        position: relative;
+      }
+
+      .close-modal {
+        position: absolute;
+        right: 20px;
+        top: 15px;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      .modal-title {
+        margin-bottom: 20px;
+        color: var(--primary-color);
+      }
+
+      .prescription-form {
+        display: grid;
+        gap: 20px;
+      }
+
+      .form-group {
+        display: grid;
+        gap: 5px;
+      }
+
+      .form-group label {
+        font-weight: bold;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+
+      .file-upload-area {
+        border: 2px dashed #ddd;
+        padding: 30px;
+        text-align: center;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: border-color 0.3s;
+      }
+
+      .file-upload-area:hover {
+        border-color: var(--primary-color);
+      }
+
+      .file-upload-icon {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+      }
+
+      #filePreview {
+        margin-top: 15px;
+        display: none;
+      }
+
+      #filePreview img {
+        max-width: 100%;
+        max-height: 200px;
+        border-radius: 5px;
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        .header-content {
+          flex-direction: column;
+          padding: 15px 0;
+        }
+
+        .logo {
+          margin-bottom: 15px;
+        }
+
+        .search-bar {
+          margin: 15px 0;
+          width: 100%;
+        }
+
+        nav ul {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <!-- Navigation -->
+      <nav>
+        <div class="nav-container">
+          <div onclick="showHome()">
+            <a href="home.html" class="logo">Curinai</a>
+          </div>
+          <div class="nav-links">
+            <a href="home.html" onclick="showHome()">Home</a>
+            <a href="doctors.html">Doctors</a>
+            <a href="medical.html">Medical Records</a>
+            <a href="shop.html" class="active">Medical Shop</a>
+            <a href="contact.html">Contact</a>
+            <button
+              id="signInButton"
+              class="login-btn"
+              onclick="openLoginModal()"
+            >
+              Login
+            </button>
+          </div>
+        </div>
+      </nav>
+      <div class="container">
+        <div class="header-content">
+          <div class="search-bar">
+            <input
+              type="text"
+              placeholder="Search for medicines, health products..."
+            />
+            <button>🔍</button>
+          </div>
+
+          <div class="user-actions">
+            <a href="#">
+              🛒
+              <span class="cart-count">3</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="modal" id="loginModal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('loginModal')">&times;</span>
+        <h2>Sign In</h2>
+        <form class="login-form" onsubmit="handleLogin(event)">
+          <input
+            type="email"
+            id="loginEmail"
+            placeholder="Email Address"
+            required
+          />
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="Password"
+            required
+          />
+          <button type="submit">Sign In</button>
+          <p style="text-align: center">
+            Don't have an account?
+            <a href="#" onclick="switchToRegister()">Register</a>
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal" id="registerModal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('registerModal')">&times;</span>
+        <h2>Create Account</h2>
+        <form class="login-form" onsubmit="handleRegister(event)">
+          <input
+            type="text"
+            id="registerName"
+            placeholder="Full Name"
+            required
+          />
+          <input
+            type="email"
+            id="registerEmail"
+            placeholder="Email Address"
+            required
+          />
+          <input
+            type="password"
+            id="registerPassword"
+            placeholder="Password"
+            required
+          />
+          <input type="password" placeholder="Confirm Password" required />
+          <button type="submit">Register</button>
+          <p style="text-align: center">
+            Already have an account?
+            <a href="#" onclick="switchToLogin()">Sign In</a>
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <section class="container products">
+      <div class="products-header">
+        <h2 class="section-title">Featured Products</h2>
+      </div>
+
+      <div class="category-tabs">
+        <div class="category-tab active" data-category="all">All</div>
+        <div class="category-tab" data-category="medicine">Medicines</div>
+        <div class="category-tab" data-category="vitamins">
+          Vitamins & Supplements
+        </div>
+        <div class="category-tab" data-category="devices">
+          Healthcare Devices
+        </div>
+      </div>
+
+      <div class="product-grid">
+        <div class="product-card" data-category="medicine">
+          <div class="product-badge badge-prescription">Rx</div>
+          <!-- <div class="product-image" r>💊</div> -->
+          <img src="img1.jpeg" class="product-image" />
+          <div class="product-content">
+            <div class="product-title">Metformin 500mg</div>
+            <div class="product-category">Diabetes Care</div>
+            <div class="product-price">$12.99</div>
+            <div class="product-actions">
+              <button class="add-to-cart">Add to Cart</button>
+              <button class="wishlist-btn">❤️</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-category="vitamins">
+          <!-- <div class="product-image">🍊</div> -->
+          <img src="img2.jpeg" class="product-image" />
+          <div class="product-content">
+            <div class="product-title">Vitamin C 1000mg</div>
+            <div class="product-category">Immunity Booster</div>
+            <div class="product-price">$8.50</div>
+            <div class="product-actions">
+              <button class="add-to-cart">Add to Cart</button>
+              <button class="wishlist-btn">❤️</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-category="devices">
+          <!-- <div class="product-image">🩺</div> -->
+          <img src="img3.jpg" class="product-image" />
+          <div class="product-content">
+            <div class="product-title">Digital BP Monitor</div>
+            <div class="product-category">Health Monitoring</div>
+            <div class="product-price">$35.99</div>
+            <div class="product-actions">
+              <button class="add-to-cart">Add to Cart</button>
+              <button class="wishlist-btn">❤️</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-category="medicine">
+          <div class="product-badge badge-prescription">Rx</div>
+          <!-- <div class="product-image">💊</div> -->
+          <img src="img4.webp" class="product-image" />
+          <div class="product-content">
+            <div class="product-title">Amoxicillin 500mg</div>
+            <div class="product-category">Antibiotics</div>
+            <div class="product-price">$15.75</div>
+            <div class="product-actions">
+              <button class="add-to-cart">Add to Cart</button>
+              <button class="wishlist-btn">❤️</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-category="vitamins">
+          <!-- <div class="product-image">☀️</div> -->
+          <img src="img5.avif" class="product-image" />
+          <div class="product-content">
+            <div class="product-title">Vitamin D3 5000 IU</div>
+            <div class="product-category">Bone Health</div>
+            <div class="product-price">$11.25</div>
+            <div class="product-actions">
+              <button class="add-to-cart">Add to Cart</button>
+              <button class="wishlist-btn">❤️</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-category="devices">
+          <!-- <div class="product-image">🌡️</div> -->
+          <img src="img6.webp" class="product-image" />
+          <div class="product-content">
+            <div class="product-title">Infrared Thermometer</div>
+            <div class="product-category">Health Monitoring</div>
+            <div class="product-price">$24.99</div>
+            <div class="product-actions">
+              <button class="add-to-cart">Add to Cart</button>
+              <button class="wishlist-btn">❤️</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI Chat Button -->
+    <div class="ai-button" id="aiButton">AI</div>
+
+    <!-- Chat Container -->
+    <div class="chat-container" id="chatContainer">
+      <div class="chat-header">
+        <h3>Curinai Health Assistant</h3>
+        <button class="close-chat" id="closeChat">×</button>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot-message">
+          Hello! I'm your Curinai Health Assistant. How can I help you today?
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="chat-input-container">
+        <input
+          type="text"
+          class="chat-input"
+          id="chatInput"
+          placeholder="Type your message here..."
+        />
+        <span>🎙️</span>
+        <button class="send-button" id="sendButton">→</button>
+      </div>
+    </div>
+    >
+
+    <footer>
+      <div class="container">
+        <div class="footer-bottom">
+          <p>&copy; 2025 HealthPlus. All Rights Reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Category tabs functionality
+      document.querySelectorAll(".category-tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          // Remove active class from all tabs
+          document.querySelectorAll(".category-tab").forEach((t) => {
+            t.classList.remove("active");
+          });
+
+          // Add active class to clicked tab
+          tab.classList.add("active");
+
+          // Filter products
+          const category = tab.dataset.category;
+          const products = document.querySelectorAll(".product-card");
+
+          products.forEach((product) => {
+            if (category === "all" || product.dataset.category === category) {
+              product.style.display = "block";
+            } else {
+              product.style.display = "none";
+            }
+          });
+        });
+      });
+
+      // Add to cart functionality
+      document.querySelectorAll(".add-to-cart").forEach((button) => {
+        button.addEventListener("click", () => {
+          const productName = button
+            .closest(".product-card")
+            .querySelector(".product-title").textContent;
+
+          // Update cart count
+          const cartCount = document.querySelector(".cart-count");
+          cartCount.textContent = parseInt(cartCount.textContent) + 1;
+
+          // Show added to cart notification
+          alert(`${productName} added to cart!`);
+        });
+      });
+
+      // Form submission
+      document
+        .querySelector(".prescription-form")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+          alert(
+            "Your prescription has been uploaded successfully! Our pharmacist will review it and contact you shortly."
+          );
+          modal.style.display = "none";
+          document.querySelector(".prescription-form").reset();
+          filePreview.style.display = "none";
+        });
+
+      function openModal() {
+        document.getElementById("bookingModal").style.display = "flex";
+      }
+
+      function closeModal() {
+        document.getElementById("bookingModal").style.display = "none";
+      }
+
+      function openLoginModal() {
+        document.getElementById("loginModal").style.display = "flex";
+      }
+
+      function switchToRegister() {
+        closeModal("loginModal");
+        document.getElementById("registerModal").style.display = "flex";
+      }
+
+      function switchToLogin() {
+        closeModal("registerModal");
+        document.getElementById("loginModal").style.display = "flex";
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+      }
+
+      function handleBooking(event) {
+        event.preventDefault();
+        alert(
+          "Booking confirmed! We will send you a confirmation email shortly."
+        );
+        closeModal();
+      }
+
+      function handleLogin(event) {
+        event.preventDefault();
+        const email = document.getElementById("loginEmail").value;
+
+        // Extract name from email for demo purposes
+        const name = email.split("@")[0];
+
+        // Set current user
+        currentUser = {
+          name: name.charAt(0).toUpperCase() + name.slice(1), // Capitalize first letter
+          email: email,
+        };
+
+        // Update UI
+        updateUserSection();
+
+        // Close modal
+        closeModal("loginModal");
+
+        // Show success message
+        alert(`Welcome back, ${currentUser.name}!`);
+      }
+
+      function handleRegister(event) {
+        event.preventDefault();
+        const name = document.getElementById("registerName").value;
+        const email = document.getElementById("registerEmail").value;
+
+        // Set current user
+        currentUser = {
+          name: name,
+          email: email,
+        };
+
+        // Update UI
+        updateUserSection();
+
+        // Close modal
+        closeModal("registerModal");
+
+        // Show success message
+        alert(`Account created successfully. Welcome, ${currentUser.name}!`);
+      }
+
+      function updateUserSection() {
+        const userSection = document.getElementById("userSection");
+
+        if (currentUser) {
+          userSection.innerHTML = `
+                    <div class="dropdown">
+                        <span class="user-greeting">Hello, ${currentUser.name} ▼</span>
+                        <div class="dropdown-content">
+                            <a href="#">My Profile</a>
+                            <a href="medical.html">Medical Records</a>
+                            <a href="#" onclick="handleSignOut()">Sign Out</a>
+                        </div>
+                    </div>
+                `;
+        } else {
+          userSection.innerHTML = `
+                    <button id="signInButton" onclick="openLoginModal()">Sign In</button>
+                `;
+        }
+      }
+
+      function handleSignOut() {
+        currentUser = null;
+        updateUserSection();
+        alert("You have been signed out successfully.");
+      }
+    </script>
+    <script>
+      // JavaScript for chat functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        const aiButton = document.getElementById("aiButton");
+        const chatContainer = document.getElementById("chatContainer");
+        const closeChat = document.getElementById("closeChat");
+        const chatInput = document.getElementById("chatInput");
+        const sendButton = document.getElementById("sendButton");
+        const chatMessages = document.getElementById("chatMessages");
+        const typingIndicator = document.getElementById("typingIndicator");
+
+        // Toggle chat window
+        aiButton.addEventListener("click", function () {
+          chatContainer.classList.toggle("active");
+        });
+
+        // Close chat window
+        closeChat.addEventListener("click", function () {
+          chatContainer.classList.remove("active");
+        });
+
+        // Send message function
+        function sendMessage() {
+          const message = chatInput.value.trim();
+
+          if (message !== "") {
+            // Add user message
+            const userMessageDiv = document.createElement("div");
+            userMessageDiv.classList.add("message", "user-message");
+            userMessageDiv.textContent = message;
+            chatMessages.appendChild(userMessageDiv);
+
+            // Clear input
+            chatInput.value = "";
+
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Show typing indicator
+            typingIndicator.style.display = "flex";
+
+            // Simulate AI response after delay
+            setTimeout(function () {
+              // Hide typing indicator
+
+              typingIndicator.style.display = "none";
+
+              // Add bot response (here you would integrate with your actual AI)
+              const botResponse = getBotResponse(message);
+              const botMessageDiv = document.createElement("div");
+              botMessageDiv.classList.add("message", "bot-message");
+              botMessageDiv.textContent = botResponse;
+              chatMessages.appendChild(botMessageDiv);
+
+              // Scroll to bottom again
+              chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1500);
+          }
+        }
+
+        // Handle send button click
+        sendButton.addEventListener("click", sendMessage);
+
+        // Handle enter key
+        chatInput.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            sendMessage();
+          }
+        });
+
+        // Simple responses - in a real app, you would connect to an AI API
+        function getBotResponse(message) {
+          message = message.toLowerCase();
+
+          if (message.includes("hello") || message.includes("hi")) {
+            return "Hello! How can I assist you with your healthcare needs today?";
+          } else if (
+            message.includes("appointment") ||
+            message.includes("book")
+          ) {
+            return "You can schedule an appointment through our portal. Would you like me to help you with that?";
+          } else if (
+            message.includes("doctor") ||
+            message.includes("specialist")
+          ) {
+            return "We have many specialists available. What type of doctor are you looking for?";
+          } else if (
+            message.includes("medical record") ||
+            message.includes("history")
+          ) {
+            return "Your medical records are available in the Medical Records section. You need to be logged in to access them.";
+          } else if (
+            message.includes("prescription") ||
+            message.includes("medicine")
+          ) {
+            return "You can view and request prescription refills from your patient dashboard after logging in.";
+          } else if (message.includes("thank")) {
+            return "You're welcome! Is there anything else I can help you with?";
+          } else {
+            return "Thank you for your question. How else can I assist you with our healthcare services?";
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

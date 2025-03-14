@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Patient Medical History</title>
+    <style>
+      :root {
+        --primary-color: #2563eb;
+        --secondary-color: #1d4ed8;
+        --accent-color: #e74c3c;
+        --light-gray: #f5f5f5;
+        --medium-gray: #e0e0e0;
+        --dark-gray: #333;
+        --main-color: #2563eb;
+        --second-color: #1d4ed8;
+        --third-color: #1e40af;
+        --transition-time: 0.4s;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: #f9f9f9;
+        color: #333;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 5px 5px 0 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      header:hover {
+        background-color: var(--secondary-color);
+      }
+
+      .logo {
+        font-size: 24px;
+        font-weight: bold;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .user-icon {
+        width: 40px;
+        height: 40px;
+        background-color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-color);
+        font-weight: bold;
+        transition: transform 0.3s ease;
+      }
+
+      .user-icon:hover {
+        transform: scale(1.1);
+      }
+
+      main {
+        background-color: white;
+        border-radius: 0 0 5px 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+
+      .patient-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        padding: 20px;
+        border-bottom: 1px solid var(--medium-gray);
+      }
+
+      .patient-photo {
+        width: 150px;
+        height: 150px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+      }
+
+      .patient-photo:hover {
+        transform: scale(1.05);
+      }
+
+      .patient-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .patient-details h2 {
+        margin-bottom: 15px;
+        color: var(--primary-color);
+        transition: color 0.3s ease;
+      }
+
+      .patient-details h2:hover {
+        color: var(--secondary-color);
+      }
+
+      .patient-details .info-group {
+        margin-bottom: 10px;
+        transition: transform 0.2s ease;
+      }
+
+      .patient-details .info-group:hover {
+        transform: translateX(5px);
+      }
+
+      .patient-details .label {
+        font-weight: bold;
+        color: var(--dark-gray);
+      }
+
+      .vital-signs {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        padding: 20px;
+        border-bottom: 1px solid var(--medium-gray);
+      }
+
+      .vital-card {
+        background-color: var(--light-gray);
+        padding: 15px;
+        border-radius: 5px;
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .vital-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        background-color: #e6f7ff;
+      }
+
+      .vital-card .value {
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin: 10px 0;
+      }
+
+      .vital-card .label {
+        font-size: 14px;
+        color: var(--dark-gray);
+      }
+
+      .tab-container {
+        padding: 20px;
+      }
+
+      .tabs {
+        display: flex;
+        border-bottom: 1px solid var(--medium-gray);
+        margin-bottom: 20px;
+      }
+
+      .tab {
+        padding: 10px 20px;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+      }
+
+      .tab:hover {
+        background-color: var(--light-gray);
+      }
+
+      .tab.active {
+        border-bottom-color: var(--primary-color);
+        color: var(--primary-color);
+        font-weight: bold;
+      }
+
+      .tab-content {
+        display: none;
+        animation: fadeIn 0.5s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
+
+      th,
+      td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--medium-gray);
+      }
+
+      th {
+        background-color: var(--light-gray);
+        font-weight: bold;
+      }
+
+      tr {
+        transition: background-color 0.3s ease;
+      }
+
+      tr:hover {
+        background-color: var(--light-gray);
+      }
+
+      .medication-status {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        transition: transform 0.3s ease;
+      }
+
+      .medication-status:hover {
+        transform: scale(1.1);
+      }
+
+      .status-active {
+        background-color: #d4edda;
+        color: #155724;
+      }
+
+      .status-discontinued {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+
+      .chart {
+        height: 300px;
+        margin-top: 20px;
+        background-color: var(--light-gray);
+        border-radius: 5px;
+        padding: 20px;
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      .chart:hover {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .chart-line {
+        fill: none;
+        stroke: var(--primary-color);
+        stroke-width: 3;
+        stroke-dasharray: 1000;
+        stroke-dashoffset: 1000;
+        animation: dash 2s ease-in-out forwards;
+      }
+
+      @keyframes dash {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+
+      .chart-axis {
+        stroke: var(--dark-gray);
+        stroke-width: 1;
+      }
+
+      .chart-point {
+        fill: var(--primary-color);
+        opacity: 0;
+        animation: appear 0.5s ease-in-out forwards;
+        animation-delay: 1.5s;
+      }
+
+      @keyframes appear {
+        to {
+          opacity: 1;
+        }
+      }
+
+      .legend {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: white;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      button {
+        padding: 10px 15px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      button:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      button.secondary {
+        background-color: var(--medium-gray);
+        color: var(--dark-gray);
+      }
+
+      button.secondary:hover {
+        background-color: #d0d0d0;
+      }
+
+      button.accent {
+        background-color: var(--accent-color);
+      }
+
+      button.accent:hover {
+        background-color: #c0392b;
+      }
+
+      #addNoteForm {
+        margin-top: 20px;
+        display: none;
+        animation: slideDown 0.3s ease;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      #addNoteForm textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--medium-gray);
+        border-radius: 5px;
+        height: 100px;
+        margin-bottom: 10px;
+        resize: vertical;
+        transition: border 0.3s ease;
+      }
+
+      #addNoteForm textarea:focus {
+        border-color: var(--primary-color);
+        outline: none;
+        box-shadow: 0 0 5px rgba(37, 99, 235, 0.3);
+      }
+
+      .note-card {
+        background-color: var(--light-gray);
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+      }
+
+      .note-card:hover {
+        background-color: #e6f7ff;
+        border-left-color: var(--primary-color);
+        transform: translateX(5px);
+      }
+
+      .note-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+
+      .note-date {
+        color: var(--dark-gray);
+        font-size: 14px;
+      }
+
+      .search-bar {
+        margin-bottom: 20px;
+        display: flex;
+        gap: 10px;
+      }
+
+      .search-bar input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid var(--medium-gray);
+        border-radius: 5px;
+        transition: all 0.3s ease;
+      }
+
+      .search-bar input:focus {
+        border-color: var(--primary-color);
+        outline: none;
+        box-shadow: 0 0 5px rgba(37, 99, 235, 0.3);
+      }
+
+      .active {
+        border-bottom: 3px solid var(--main-color);
+        color: var(--main-color) !important;
+      }
+
+      /* Navigation */
+      nav {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 1rem 5%;
+        position: relative;
+        width: 100%;
+        top: 0;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        transition: all var(--transition-time) ease;
+      }
+
+      nav:hover {
+        background: rgba(255, 255, 255, 1);
+      }
+
+      .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .logo {
+        color: var(--main-color);
+        font-size: 1.7rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        text-decoration: none;
+        position: relative;
+      }
+
+      .logo::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 3px;
+        background-color: var(--main-color);
+        transition: width 0.4s ease;
+      }
+
+      .logo:hover {
+        transform: scale(1.05);
+      }
+
+      .logo:hover::after {
+        width: 100%;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #4b5563;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 5px 0;
+      }
+
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--main-color);
+        transition: width 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        color: var(--main-color);
+      }
+
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      .login-btn {
+        background: var(--main-color);
+        color: white;
+        padding: 0.6rem 1.8rem;
+        border-radius: 25px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .login-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: all 0.5s ease;
+      }
+
+      .login-btn:hover {
+        background: var(--second-color);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(29, 78, 216, 0.4);
+      }
+
+      .login-btn:hover::before {
+        left: 100%;
+      }
+
+      .login-btn:active {
+        transform: translateY(0);
+      }
+
+      /* AI Button Style */
+      .ai-button {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        background-color: #1a73e8;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+        transition: all 0.3s ease;
+      }
+
+      .ai-button:hover {
+        background-color: #1557b0;
+        transform: scale(1.1) rotate(10deg);
+      }
+
+      /* Chat Container Style */
+      .chat-container {
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        width: 350px;
+        height: 450px;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 998;
+        border: 1px solid #e0e0e0;
+      }
+
+      .chat-container span {
+        display: flex;
+        align-items: center;
+      }
+
+      .chat-header {
+        background-color: #1a73e8;
+        color: white;
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .chat-header h3 {
+        margin: 0;
+        font-size: 16px;
+      }
+
+      .close-chat {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+
+      .close-chat:hover {
+        transform: scale(1.2);
+      }
+
+      .chat-messages {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        background-color: #f5f8ff;
+      }
+
+      .message {
+        margin-bottom: 15px;
+        max-width: 80%;
+        padding: 10px 15px;
+        border-radius: 15px;
+        line-height: 1.4;
+        font-size: 14px;
+        animation: messageIn 0.3s ease;
+      }
+
+      @keyframes messageIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .bot-message {
+        background-color: #e3f2fd;
+        color: #333;
+        border-top-left-radius: 5px;
+        align-self: flex-start;
+      }
+
+      .user-message {
+        background-color: #1a73e8;
+        color: white;
+        margin-left: auto;
+        border-top-right-radius: 5px;
+      }
+
+      .chat-input-container {
+        display: flex;
+        padding: 10px;
+        border-top: 1px solid #e0e0e0;
+        background-color: white;
+      }
+
+      .chat-input {
+        flex: 1;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        outline: none;
+        font-size: 14px;
+        transition: border 0.3s ease;
+      }
+
+      .chat-input:focus {
+        border-color: #1a73e8;
+        box-shadow: 0 0 5px rgba(26, 115, 232, 0.3);
+      }
+
+      .send-button {
+        background-color: #1a73e8;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        margin-left: 10px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.3s ease;
+      }
+
+      .send-button:hover {
+        background-color: #1557b0;
+        transform: rotate(15deg);
+      }
+
+      /* Show animation */
+      .chat-container.active {
+        display: flex;
+        animation: fadeIn 0.3s ease;
+      }
+
+      /* Typing indicator */
+      .typing-indicator {
+        display: flex;
+        padding: 10px 15px;
+        background-color: #e3f2fd;
+        border-radius: 15px;
+        margin-bottom: 15px;
+        max-width: 80%;
+        border-top-left-radius: 5px;
+        align-self: flex-start;
+        display: none;
+      }
+
+      .typing-indicator span {
+        height: 8px;
+        width: 8px;
+        background-color: #1a73e8;
+        border-radius: 50%;
+        display: inline-block;
+        margin: 0 2px;
+        opacity: 0.7;
+      }
+
+      .typing-indicator span:nth-child(1) {
+        animation: blink 1s infinite 0.2s;
+      }
+
+      .typing-indicator span:nth-child(2) {
+        animation: blink 1s infinite 0.4s;
+      }
+
+      .typing-indicator span:nth-child(3) {
+        animation: blink 1s infinite 0.6s;
+      }
+
+      @keyframes blink {
+        0% {
+          opacity: 0.4;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0.4;
+        }
+      }
+
+      /* تصميم الزر */
+      .btn {
+        position: relative;
+        top: 260px;
+        left: 40px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      /* تصميم النافذة مع تأثير الضبابية */
+      .popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(8px);
+        justify-content: center;
+        align-items: center;
+        animation: fadeIn 0.3s ease-in-out;
+        /* أنيميشن عند الظهور */
+      }
+
+      /* تصميم محتوى النافذة */
+      .popup-content {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        position: relative;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        transform: scale(0.8);
+        opacity: 0;
+        animation: scaleUp 0.3s ease-in-out forwards;
+        /* أنيميشن التكبير */
+      }
+
+      /* زر الإغلاق */
+      .close {
+        position: absolute;
+        top: -15px;
+        right: -15px;
+        width: 30px;
+        height: 30px;
+        background: #2563eb;
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: 0.3s;
+        border: 2px solid white;
+      }
+
+      /* تأثير hover لزر الإغلاق */
+      .close:hover {
+        background: #2563eb;
+        transform: scale(1.2);
+      }
+
+      /* أنيميشن فتح النافذة */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes scaleUp {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      /* أنيميشن إغلاق النافذة */
+      @keyframes fadeOut {
+        from {
+          opacity: 1;
+        }
+
+        to {
+          opacity: 0;
+        }
+      }
+
+      @keyframes scaleDown {
+        from {
+          transform: scale(1);
+          opacity: 1;
+        }
+
+        to {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .patient-info {
+          grid-template-columns: 1fr;
+        }
+
+        .patient-photo {
+          margin: 0 auto;
+        }
+
+        .vital-signs {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .tabs {
+          flex-wrap: wrap;
+        }
+
+        .tab {
+          flex: 1;
+          text-align: center;
+          min-width: 80px;
+        }
+
+        table {
+          display: block;
+          overflow-x: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav>
+      <div class="nav-container">
+        <div onclick="showHome()">
+          <a href="home.html" class="logo">Curinai</a>
+        </div>
+        <div class="nav-links">
+          <a href="home.html" onclick="showHome()">Home</a>
+          <a href="doctors.html">Doctors</a>
+          <a href="medical.html" class="active">Medical Records</a>
+          <a href="shop.html">Medical Shop</a>
+          <a href="#contact.html">Contact</a>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <header>
+        <div class="user-info"></div>
+      </header>
+
+      <!-- زر لإظهار النافذة -->
+      <button class="btn" id="generateQr">Show QR</button>
+
+      <!-- النافذة المنبثقة -->
+      <div id="popup" class="popup">
+        <div class="popup-content">
+          <span class="close" id="closePopup">&times;</span>
+          <div id="qrCode"></div>
+        </div>
+      </div>
+      <main>
+        <div class="patient-info">
+          <div class="patient-photo" id="patientPhoto">
+            <img id="patientImage" src="m.jpg" alt="Patient Photo" />
+          </div>
+          <div class="patient-details">
+            <h2>John Doe</h2>
+            <div class="info-group">
+              <div class="label">Patient ID:</div>
+              <div>P-12345678</div>
+            </div>
+            <div class="info-group">
+              <div class="label">Date of Birth:</div>
+              <div>May 15, 1980 (44 years)</div>
+            </div>
+            <div class="info-group">
+              <div class="label">Gender:</div>
+              <div>Male</div>
+            </div>
+            <div class="info-group">
+              <div class="label">Blood Type:</div>
+              <div>O+</div>
+            </div>
+          </div>
+          <div class="patient-details">
+            <div class="info-group">
+              <div class="label">Phone:</div>
+              <div>(555) 123-4567</div>
+            </div>
+            <div class="info-group">
+              <div class="label">Email:</div>
+              <div>john.doe@example.com</div>
+            </div>
+            <div class="info-group">
+              <div class="label">Address:</div>
+              <div>123 Main Street, Anytown, CA 12345</div>
+            </div>
+            <div class="info-group">
+              <div class="label">Emergency Contact:</div>
+              <div>Jane Doe (Wife) - (555) 987-6543</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vital-signs">
+          <div class="vital-card">
+            <div class="label">Blood Pressure</div>
+            <div class="value">120/80</div>
+            <div class="date">Feb 20, 2025</div>
+          </div>
+          <div class="vital-card">
+            <div class="label">Heart Rate</div>
+            <div class="value">72 bpm</div>
+            <div class="date">Feb 20, 2025</div>
+          </div>
+          <div class="vital-card">
+            <div class="label">Temperature</div>
+            <div class="value">98.6 °F</div>
+            <div class="date">Feb 20, 2025</div>
+          </div>
+          <div class="vital-card">
+            <div class="label">Weight</div>
+            <div class="value">180 lbs</div>
+            <div class="date">Feb 20, 2025</div>
+          </div>
+          <div class="vital-card">
+            <div class="label">Height</div>
+            <div class="value">5'11"</div>
+            <div class="date">Feb 20, 2025</div>
+          </div>
+          <div class="vital-card">
+            <div class="label">BMI</div>
+            <div class="value">25.1</div>
+            <div class="date">Feb 20, 2025</div>
+          </div>
+        </div>
+
+        <div class="tab-container">
+          <div class="tabs">
+            <div class="tab active" data-tab="medications">Medications</div>
+            <div class="tab" data-tab="allergies">Allergies</div>
+            <div class="tab" data-tab="conditions">Conditions</div>
+            <div class="tab" data-tab="notes">Clinical Notes</div>
+            <div class="tab" data-tab="tests">Medical Tests</div>
+            <div class="tab" data-tab="xrays">X-rays</div>
+            <div class="tab" data-tab="appointments">Appointments</div>
+          </div>
+
+          <div id="medications" class="tab-content active">
+            <div class="search-bar">
+              <input type="text" placeholder="Search medications..." />
+              <button>Search</button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Medication</th>
+                  <th>Dosage</th>
+                  <th>Frequency</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Lisinopril</td>
+                  <td>10mg</td>
+                  <td>Once daily</td>
+                  <td>Jan 15, 2024</td>
+                  <td>-</td>
+                  <td>
+                    <span class="medication-status status-active">Active</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Atorvastatin</td>
+                  <td>20mg</td>
+                  <td>Once daily (evening)</td>
+                  <td>Jan 15, 2024</td>
+                  <td>-</td>
+                  <td>
+                    <span class="medication-status status-active">Active</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Metformin</td>
+                  <td>500mg</td>
+                  <td>Twice daily with meals</td>
+                  <td>Mar 10, 2023</td>
+                  <td>-</td>
+                  <td>
+                    <span class="medication-status status-active">Active</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Amoxicillin</td>
+                  <td>500mg</td>
+                  <td>Three times daily</td>
+                  <td>Oct 5, 2023</td>
+                  <td>Oct 15, 2023</td>
+                  <td>
+                    <span class="medication-status status-discontinued"
+                      >Discontinued</span
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- <div class="action-buttons">
+              <button>Add Medication</button>
+              <button class="secondary">Print List</button>
+            </div> -->
+          </div>
+
+          <div id="allergies" class="tab-content">
+            <table>
+              <thead>
+                <tr>
+                  <th>Allergen</th>
+                  <th>Reaction</th>
+                  <th>Severity</th>
+                  <th>Onset Date</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Penicillin</td>
+                  <td>Rash, Hives</td>
+                  <td>Moderate</td>
+                  <td>Childhood</td>
+                  <td>Avoid all penicillin-based antibiotics</td>
+                </tr>
+                <tr>
+                  <td>Shellfish</td>
+                  <td>Anaphylaxis</td>
+                  <td>Severe</td>
+                  <td>Jan 2018</td>
+                  <td>Carries EpiPen</td>
+                </tr>
+                <tr>
+                  <td>Pollen</td>
+                  <td>Rhinitis, Congestion</td>
+                  <td>Mild</td>
+                  <td>Unknown</td>
+                  <td>Seasonal - Spring</td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- <div class="action-buttons">
+              <button>Add Allergy</button>
+            </div> -->
+          </div>
+
+          <div id="conditions" class="tab-content">
+            <table>
+              <thead>
+                <tr>
+                  <th>Condition</th>
+                  <th>Status</th>
+                  <th>Diagnosed</th>
+                  <th>Treating Physician</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Hypertension</td>
+                  <td>Active</td>
+                  <td>Jan 2024</td>
+                  <td>Dr. Sarah Johnson</td>
+                  <td>Well-controlled with medication</td>
+                </tr>
+                <tr>
+                  <td>Type 2 Diabetes</td>
+                  <td>Active</td>
+                  <td>Mar 2023</td>
+                  <td>Dr. Robert Chen</td>
+                  <td>Diet-controlled, periodic monitoring</td>
+                </tr>
+                <tr>
+                  <td>Appendicitis</td>
+                  <td>Resolved</td>
+                  <td>Jun 2015</td>
+                  <td>Dr. Michael Ross</td>
+                  <td>Appendectomy performed 06/12/2015</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="chart">
+              <svg width="100%" height="100%">
+                <line x1="50" y1="250" x2="50" y2="50" class="chart-axis" />
+                <line x1="50" y1="250" x2="600" y2="250" class="chart-axis" />
+
+                <!-- Blood Pressure Trend -->
+                <path
+                  d="M100,180 L200,170 L300,190 L400,160 L500,140"
+                  class="chart-line"
+                />
+
+                <circle cx="100" cy="180" class="chart-point" />
+                <circle cx="200" cy="170" class="chart-point" />
+                <circle cx="300" cy="190" class="chart-point" />
+                <circle cx="400" cy="160" class="chart-point" />
+                <circle cx="500" cy="140" class="chart-point" />
+
+                <!-- Text labels omitted for simplicity -->
+              </svg>
+              <div class="legend">
+                <div>Blood Pressure Trend</div>
+              </div>
+            </div>
+            <!-- <div class="action-buttons">
+              <button>Add Condition</button>
+              <button class="secondary">View Full History</button>
+            </div> -->
+          </div>
+
+          <div id="notes" class="tab-content">
+            <!-- <div class="action-buttons">
+              <button id="addNoteBtn">Add New Note</button>
+            </div>
+
+            <div id="addNoteForm">
+              <textarea placeholder="Enter clinical note..."></textarea>
+              <div class="action-buttons">
+                <button>Save Note</button>
+                <button class="secondary" id="cancelNoteBtn">Cancel</button>
+              </div>
+            </div> -->
+
+            <div class="note-card">
+              <div class="note-header">
+                <strong>Routine Check-up</strong>
+                <span class="note-date">Feb 20, 2025 - Dr. Sarah Johnson</span>
+              </div>
+              <p>
+                Patient presented for routine check-up. Vitals stable and within
+                normal ranges. Continues medication for hypertension and
+                diabetes. Reports occasional mild headaches in the morning,
+                advised to monitor and return if frequency increases. Patient is
+                following diet recommendations and exercising 3 times weekly.
+                Next appointment scheduled for 3 months.
+              </p>
+            </div>
+
+            <div class="note-card">
+              <div class="note-header">
+                <strong>Diabetes Follow-up</strong>
+                <span class="note-date">Nov 15, 2024 - Dr. Robert Chen</span>
+              </div>
+              <p>
+                Quarterly diabetes follow-up. HbA1c at 6.8%, which is improved
+                from last reading of 7.2%. Patient reports good compliance with
+                medication and diet. Discussed importance of regular foot
+                examinations. No signs of neuropathy or other complications at
+                this time. Continue current treatment plan.
+              </p>
+            </div>
+
+            <div class="note-card">
+              <div class="note-header">
+                <strong>Annual Physical</strong>
+                <span class="note-date">Aug 05, 2024 - Dr. Sarah Johnson</span>
+              </div>
+              <p>
+                Annual physical examination. Patient generally in good health.
+                Blood pressure slightly elevated at 135/85, adjusted medication
+                dosage. Complete blood count within normal limits. Cholesterol
+                elevated (LDL 130 mg/dL), started on atorvastatin 20mg daily.
+                Recommended continued lifestyle modifications including
+                low-sodium diet and increased physical activity.
+              </p>
+            </div>
+          </div>
+
+          <div id="tests" class="tab-content">
+            <table>
+              <thead>
+                <tr>
+                  <th>Test</th>
+                  <th>Date</th>
+                  <th>Result</th>
+                  <th>Reference Range</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Comprehensive Metabolic Panel</td>
+                  <td>Feb 18, 2025</td>
+                  <td>See details</td>
+                  <td>Various</td>
+                  <td>Complete</td>
+                </tr>
+                <tr>
+                  <td>Lipid Panel</td>
+                  <td>Feb 18, 2025</td>
+                  <td>
+                    Total: 190 mg/dL<br />
+                    LDL: 110 mg/dL<br />
+                    HDL: 45 mg/dL<br />
+                    Triglycerides: 175 mg/dL
+                  </td>
+                  <td>
+                    Total: &lt;200 mg/dL<br />
+                    LDL: &lt;100 mg/dL<br />
+                    HDL: &gt;40 mg/dL<br />
+                    Triglycerides: &lt;150 mg/dL
+                  </td>
+                  <td>Complete</td>
+                </tr>
+                <tr>
+                  <td>HbA1c</td>
+                  <td>Feb 18, 2025</td>
+                  <td>6.8%</td>
+                  <td>&lt;5.7%</td>
+                  <td>Complete</td>
+                </tr>
+                <tr>
+                  <td>Urinalysis</td>
+                  <td>Feb 18, 2025</td>
+                  <td>Normal</td>
+                  <td>N/A</td>
+                  <td>Complete</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div id="xrays" class="tab-content">
+            <table>
+              <thead>
+                <tr>
+                  <th>Imaging Type</th>
+                  <th>Body Part</th>
+                  <th>Date</th>
+                  <th>Findings</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>X-Ray</td>
+                  <td>Chest</td>
+                  <td>Aug 05, 2024</td>
+                  <td>No abnormalities</td>
+                  <td><button class="secondary">View Image</button></td>
+                </tr>
+                <tr>
+                  <td>MRI</td>
+                  <td>Knee (Right)</td>
+                  <td>Jan 10, 2025</td>
+                  <td>Minor meniscus tear</td>
+                  <td><button class="secondary">View Image</button></td>
+                </tr>
+                <tr>
+                  <td>CT Scan</td>
+                  <td>Abdomen</td>
+                  <td>Dec 15, 2024</td>
+                  <td>Normal findings</td>
+                  <td><button class="secondary">View Image</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div id="appointments" class="tab-content">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Provider</th>
+                  <th>Type</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>May 20, 2025</td>
+                  <td>10:30 AM</td>
+                  <td>Dr. Sarah Johnson</td>
+                  <td>Routine Check-up</td>
+                  <td>
+                    <button class="secondary">Reschedule</button>
+                    <button class="accent">Cancel</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>June 15, 2025</td>
+                  <td>2:00 PM</td>
+                  <td>Dr. Robert Chen</td>
+                  <td>Diabetes Follow-up</td>
+                  <td>
+                    <button class="secondary">Reschedule</button>
+                    <button class="accent">Cancel</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>July 05, 2025</td>
+                  <td>9:15 AM</td>
+                  <td>Dr. Lisa Patel</td>
+                  <td>Cardiology Consultation</td>
+                  <td>
+                    <button class="secondary">Reschedule</button>
+                    <button class="accent">Cancel</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>August 15, 2025</td>
+                  <td>11:00 AM</td>
+                  <td>Dr. Sarah Johnson</td>
+                  <td>Annual Physical</td>
+                  <td>
+                    <button class="secondary">Reschedule</button>
+                    <button class="accent">Cancel</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="action-buttons">
+              <button>Schedule New Appointment</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- AI Chat Button -->
+    <div class="ai-button" id="aiButton">AI</div>
+
+    <!-- Chat Container -->
+    <div class="chat-container" id="chatContainer">
+      <div class="chat-header">
+        <h3>Curinai Health Assistant</h3>
+        <button class="close-chat" id="closeChat">×</button>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot-message">
+          Hello! I'm your Curinai Health Assistant. How can I help you today?
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="chat-input-container">
+        <input
+          type="text"
+          class="chat-input"
+          id="chatInput"
+          placeholder="Type your message here..."
+        />
+        <span>🎙️</span>
+        <button class="send-button" id="sendButton">→</button>
+      </div>
+    </div>
+    >
+
+    <script>
+      function showHome() {
+        document.getElementById("home-page").style.display = "block";
+        document.getElementById("signin-page").style.display = "none";
+        document.getElementById("signup-page").style.display = "none";
+        document.getElementById("doctors-page").style.display = "none";
+      }
+
+      function showDoctors() {
+        document.getElementById("home-page").style.display = "none";
+        document.getElementById("signin-page").style.display = "none";
+        document.getElementById("signup-page").style.display = "none";
+        document.getElementById("doctors-page").style.display = "block";
+      }
+
+      // Tab switching functionality
+      document.querySelectorAll(".tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          // Remove active class from all tabs
+          document.querySelectorAll(".tab").forEach((t) => {
+            t.classList.remove("active");
+          });
+
+          // Add active class to clicked tab
+          tab.classList.add("active");
+
+          // Hide all tab content
+          document.querySelectorAll(".tab-content").forEach((content) => {
+            content.classList.remove("active");
+          });
+
+          // Show relevant tab content
+          const tabId = tab.getAttribute("data-tab");
+          document.getElementById(tabId).classList.add("active");
+        });
+      });
+
+      // Add Note Form Toggle
+      const addNoteBtn = document.getElementById("addNoteBtn");
+      const cancelNoteBtn = document.getElementById("cancelNoteBtn");
+      const addNoteForm = document.getElementById("addNoteForm");
+
+      addNoteBtn.addEventListener("click", () => {
+        addNoteForm.style.display = "block";
+        addNoteBtn.style.display = "none";
+      });
+
+      cancelNoteBtn.addEventListener("click", () => {
+        addNoteForm.style.display = "none";
+        addNoteBtn.style.display = "inline-block";
+      });
+
+      // Sample data for future enhancements
+      const patientData = {
+        vitals: [
+          { date: "2025-02-20", bp: "120/80", hr: 72, temp: 98.6, weight: 180 },
+          { date: "2024-11-15", bp: "125/82", hr: 75, temp: 98.4, weight: 183 },
+          { date: "2024-08-05", bp: "135/85", hr: 78, temp: 98.7, weight: 185 },
+          { date: "2024-02-12", bp: "140/90", hr: 80, temp: 98.5, weight: 187 },
+        ],
+        labs: {
+          glucose: [
+            { date: "2025-02-18", value: 110 },
+            { date: "2024-11-12", value: 118 },
+            { date: "2024-08-03", value: 125 },
+            { date: "2024-02-10", value: 130 },
+          ],
+          hba1c: [
+            { date: "2025-02-18", value: 6.8 },
+            { date: "2024-11-12", value: 7.0 },
+            { date: "2024-08-03", value: 7.2 },
+            { date: "2024-02-10", value: 7.5 },
+          ],
+        },
+      };
+
+      // This data could be used to create dynamic charts
+      // More functionality can be added as needed
+    </script>
+    <script>
+      // JavaScript for chat functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        const aiButton = document.getElementById("aiButton");
+        const chatContainer = document.getElementById("chatContainer");
+        const closeChat = document.getElementById("closeChat");
+        const chatInput = document.getElementById("chatInput");
+        const sendButton = document.getElementById("sendButton");
+        const chatMessages = document.getElementById("chatMessages");
+        const typingIndicator = document.getElementById("typingIndicator");
+
+        // Toggle chat window
+        aiButton.addEventListener("click", function () {
+          chatContainer.classList.toggle("active");
+        });
+
+        // Close chat window
+        closeChat.addEventListener("click", function () {
+          chatContainer.classList.remove("active");
+        });
+
+        // Send message function
+        function sendMessage() {
+          const message = chatInput.value.trim();
+
+          if (message !== "") {
+            // Add user message
+            const userMessageDiv = document.createElement("div");
+            userMessageDiv.classList.add("message", "user-message");
+            userMessageDiv.textContent = message;
+            chatMessages.appendChild(userMessageDiv);
+
+            // Clear input
+            chatInput.value = "";
+
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Show typing indicator
+            typingIndicator.style.display = "flex";
+
+            // Simulate AI response after delay
+            setTimeout(function () {
+              // Hide typing indicator
+
+              typingIndicator.style.display = "none";
+
+              // Add bot response (here you would integrate with your actual AI)
+              const botResponse = getBotResponse(message);
+              const botMessageDiv = document.createElement("div");
+              botMessageDiv.classList.add("message", "bot-message");
+              botMessageDiv.textContent = botResponse;
+              chatMessages.appendChild(botMessageDiv);
+
+              // Scroll to bottom again
+              chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1500);
+          }
+        }
+
+        // Handle send button click
+        sendButton.addEventListener("click", sendMessage);
+
+        // Handle enter key
+        chatInput.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            sendMessage();
+          }
+        });
+
+        // Simple responses - in a real app, you would connect to an AI API
+        function getBotResponse(message) {
+          message = message.toLowerCase();
+
+          if (message.includes("hello") || message.includes("hi")) {
+            return "Hello! How can I assist you with your healthcare needs today?";
+          } else if (
+            message.includes("appointment") ||
+            message.includes("book")
+          ) {
+            return "You can schedule an appointment through our portal. Would you like me to help you with that?";
+          } else if (
+            message.includes("doctor") ||
+            message.includes("specialist")
+          ) {
+            return "We have many specialists available. What type of doctor are you looking for?";
+          } else if (
+            message.includes("medical record") ||
+            message.includes("history")
+          ) {
+            return "Your medical records are available in the Medical Records section. You need to be logged in to access them.";
+          } else if (
+            message.includes("prescription") ||
+            message.includes("medicine")
+          ) {
+            return "You can view and request prescription refills from your patient dashboard after logging in.";
+          } else if (message.includes("thank")) {
+            return "You're welcome! Is there anything else I can help you with?";
+          } else {
+            return "Thank you for your question. How else can I assist you with our healthcare services?";
+          }
+        }
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const popup = document.getElementById("popup");
+        popup.style.display = "none";
+      });
+
+      const btn = document.getElementById("generateQr");
+      const popup = document.getElementById("popup");
+      const closePopup = document.getElementById("closePopup");
+
+      // عند الضغط على الزر، تظهر النافذة مع الأنيميشن
+      btn.addEventListener("click", () => {
+        popup.style.display = "flex";
+        generateQRCode();
+      });
+
+      // عند الضغط على زر الإغلاق، تختفي النافذة مع الأنيميشن
+      closePopup.addEventListener("click", () => {
+        closePopupAnimation();
+      });
+
+      // عند الضغط خارج النافذة، تختفي أيضًا
+      window.addEventListener("click", (e) => {
+        if (e.target === popup) {
+          closePopupAnimation();
+        }
+      });
+
+      function closePopupAnimation() {
+        const popupContent = document.querySelector(".popup-content");
+        popupContent.style.animation = "scaleDown 0.3s ease-in-out forwards";
+        setTimeout(() => {
+          popup.style.display = "none";
+          popupContent.style.animation = "scaleUp 0.3s ease-in-out forwards"; // لإعادة ضبط الأنيميشن عند الفتح مجددًا
+        }, 300);
+      }
+
+      // دالة لإنشاء رمز QR مع لون أزرق
+      function generateQRCode() {
+        const qrDiv = document.getElementById("qrCode");
+        qrDiv.innerHTML = "";
+
+        new QRCode(qrDiv, {
+          text: "www.linkedin.com/in/a7med-fouda-gt3rs",
+          width: 200,
+          height: 200,
+          colorDark: "#2563eb",
+          colorLight: "#ffffff",
+        });
+      }
+    </script>
+
+    <!-- مكتبة QRCode.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  </body>
+</html>
